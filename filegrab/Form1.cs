@@ -10,7 +10,7 @@ using System.IO;
 using System.Security.Permissions;
 using System.Net;
 
-namespace filemon
+namespace filegrab
 {
     public partial class Form1 : Form
     {
@@ -61,7 +61,7 @@ namespace filemon
             else
             {
                 btnStart.Text = "Start";
-                this.Text = "FileMon";
+                this.Text = "FileGrab";
                 changeControls(true);
                 watchStop();
             }
@@ -123,7 +123,7 @@ namespace filemon
         {
             if (txtFtpHost.Text.Length < 1)
             {
-                MessageBox.Show("FTP host missing", "FileMon", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("FTP host missing", "FileGrab", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 txtFtpHost.Focus();
                 return false;
             }
@@ -133,13 +133,13 @@ namespace filemon
 
             if (txtFtpUser.Text.Length < 1)
             {
-                MessageBox.Show("FTP user missing", "FileMon", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("FTP user missing", "FileGrab", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 txtFtpUser.Focus();
                 return false;
             }
             else if (txtFtpPassword.Text.Length < 1)
             {
-                MessageBox.Show("FTP password missing", "FileMon", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("FTP password missing", "FileGrab", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 txtFtpPassword.Focus();
                 return false;
             }

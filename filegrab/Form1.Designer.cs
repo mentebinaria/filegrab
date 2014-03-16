@@ -1,4 +1,4 @@
-﻿namespace filemon
+﻿namespace filegrab
 {
     partial class Form1
     {
@@ -269,7 +269,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Name = "Form1";
-            this.Text = "FileMon";
+            this.Text = "FileGrab";
             ((System.ComponentModel.ISupportInitialize)(this.txtFtpPort)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

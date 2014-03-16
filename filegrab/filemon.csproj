@@ -8,8 +8,8 @@
     <ProjectGuid>{1BF0DDF1-F7C7-4B0E-ABAB-8B30D96EA6EB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>filemon</RootNamespace>
-    <AssemblyName>filemon</AssemblyName>
+    <RootNamespace>filegrab</RootNamespace>
+    <AssemblyName>filegrab</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

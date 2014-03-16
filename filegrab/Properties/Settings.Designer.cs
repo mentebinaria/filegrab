@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace filemon.Properties
+namespace filegrab.Properties
 {
 
 

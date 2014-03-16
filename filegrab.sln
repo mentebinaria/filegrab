@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "filemon", "filemon\filemon.csproj", "{1BF0DDF1-F7C7-4B0E-ABAB-8B30D96EA6EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "filegrab", "filegrab\filegrab.csproj", "{1BF0DDF1-F7C7-4B0E-ABAB-8B30D96EA6EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
