@@ -1,36 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.Security.Permissions;
 using System.Net;
 
 namespace filegrab
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
         FileSystemWatcher watcher = new FileSystemWatcher();
         FtpWebRequest ftp;
 
-        public Form1()
+        public frmMain()
         {
             InitializeComponent();
         }
 
         private void rbSpecific_CheckedChanged(object sender, EventArgs e)
         {
-                txtPath.Enabled = btnPath.Enabled = rbSpecific.Checked;
+                txtPath.Enabled = btnPath.Enabled = chkRecursive.Enabled = rbSpecific.Checked;
         }
 
         public void watchStart()
         {
             watcher.Path = (rbAll.Checked) ? "C:\\" : txtPath.Text;
-            watcher.IncludeSubdirectories = true;
+            watcher.IncludeSubdirectories = rbAll.Checked | chkRecursive.Enabled;
             watcher.NotifyFilter = NotifyFilters.FileName;
             watcher.Created += new FileSystemEventHandler(OnCreation);
             watcher.EnableRaisingEvents = true;
@@ -43,13 +36,16 @@ namespace filegrab
 
         private void changeControls(bool state)
         {
-            groupBox1.Enabled = groupBox2.Enabled = chkHideWindow.Enabled = state;
+           groupFilesystem.Enabled = groupFtp.Enabled = chkHideWindow.Enabled = groupCopy.Enabled = state;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
             if (chkHideWindow.Checked)
-                Form1.ActiveForm.Visible = false;
+            {
+                frmMain.ActiveForm.ShowInTaskbar = false;
+                frmMain.ActiveForm.Visible = false;
+            }
 
             if (btnStart.Text.Equals("Start"))
             {
@@ -64,12 +60,24 @@ namespace filegrab
                 this.Text = "FileGrab";
                 changeControls(true);
                 watchStop();
+                statusFileFound.Text = "";
             }
         }
 
         public void OnCreation(object source, FileSystemEventArgs e)
         {
-            if (!validateFtpFields())
+            statusFileFound.Text = e.FullPath;
+
+            if (txtCopyTo.Text != "")
+            {
+                try
+                {
+                    File.Copy(e.FullPath, Path.Combine(txtCopyTo.Text, e.Name));
+                }
+                catch (IOException ex) { MessageBox.Show(ex.Message); }
+            }
+
+            if (txtFtpHost.Text == "")
                 return;
 
             ftp = (FtpWebRequest)WebRequest.Create("ftp://" + txtFtpHost.Text + ":" + txtFtpPort.Value + "/" + e.Name);
@@ -89,6 +97,7 @@ namespace filegrab
                     requestStream.Write(buffer, 0, buffer.Length);
                     requestStream.Close();
                     requestStream.Flush();
+                    statusFileFound.Text = e.FullPath;
                 }
                 catch (Exception ex)
                 {
@@ -101,22 +110,13 @@ namespace filegrab
 
         private void btnPath_Click(object sender, EventArgs e)
         {
-            folderBrowserDialog1.ShowDialog();
-            txtPath.Text = folderBrowserDialog1.SelectedPath;
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
+            folderDlg.ShowDialog();
+            txtPath.Text = folderDlg.SelectedPath;
         }
 
         private void chkFtpAnonymous_CheckedChanged(object sender, EventArgs e)
         {
             txtFtpUser.Enabled = txtFtpPassword.Enabled = !chkFtpAnonymous.Checked;
-        }
-
-        private void txtFtpHost_TextChanged(object sender, EventArgs e)
-        {
         }
 
         private bool validateFtpFields()
@@ -156,11 +156,11 @@ namespace filegrab
 
         private void btnFtpTest_Click(object sender, EventArgs e)
         {
-            ftp = (FtpWebRequest)WebRequest.Create("ftp://" + txtFtpHost.Text + ":" + txtFtpPort.Value);
-            ftp.Method = WebRequestMethods.Ftp.ListDirectory;
-
             if (!validateFtpFields())
                 return;
+
+            ftp = (FtpWebRequest)WebRequest.Create("ftp://" + txtFtpHost.Text + ":" + txtFtpPort.Value);
+            ftp.Method = WebRequestMethods.Ftp.ListDirectory;
 
             setFtpCredentials();
 
@@ -176,8 +176,15 @@ namespace filegrab
             }
         }
 
+        private void btnCopyToBrowse_Click(object sender, EventArgs e)
+        {
+            folderDlg.ShowDialog();
+            txtCopyTo.Text = folderDlg.SelectedPath;
+        }
 
-
-
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            statusFileFound.Text = "";
+        }
     }
 }

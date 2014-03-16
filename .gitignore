@@ -1,2 +1,4 @@
-filemon/bin
-filemon/obj
+filegrab/obj
+filegrab/bin
+*.suo
+filegrab/app.config
