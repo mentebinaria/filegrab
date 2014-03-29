@@ -2,12 +2,14 @@
 using System.Windows.Forms;
 using System.IO;
 using System.Net;
+using System.Collections.Generic;
 
 namespace filegrab
 {
     public partial class frmMain : Form
     {
         FileSystemWatcher watcher = new FileSystemWatcher();
+        List<FileSystemWatcher> watches = new List<FileSystemWatcher>();
         FtpWebRequest ftp;
 
         public frmMain()
@@ -22,11 +24,33 @@ namespace filegrab
 
         public void watchStart()
         {
-            watcher.Path = (rbAll.Checked) ? "C:\\" : txtPath.Text;
-            watcher.IncludeSubdirectories = rbAll.Checked | chkRecursive.Enabled;
-            watcher.NotifyFilter = NotifyFilters.FileName;
-            watcher.Created += new FileSystemEventHandler(OnCreation);
-            watcher.EnableRaisingEvents = true;
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
+            FileSystemWatcher watch;
+
+            if (rbAll.Checked)
+            {
+                foreach (DriveInfo d in allDrives)
+                {
+                    if (d.DriveType == DriveType.Fixed)
+                    {
+                        watch = new FileSystemWatcher();
+                        watch.Path = d.RootDirectory.ToString();
+                        watch.IncludeSubdirectories = true;
+                        watch.NotifyFilter = NotifyFilters.FileName;
+                        watch.Created += new FileSystemEventHandler(OnCreation);
+                        watch.EnableRaisingEvents = true;
+                        watches.Add(watch);
+                    }
+                }
+                return;
+            }
+
+            watch = new FileSystemWatcher();
+            watch.Path = txtPath.Text;
+            watch.IncludeSubdirectories = rbAll.Checked | chkRecursive.Enabled;
+            watch.NotifyFilter = NotifyFilters.FileName;
+            watch.Created += new FileSystemEventHandler(OnCreation);
+            watch.EnableRaisingEvents = true;
         }
 
         public void watchStop()
@@ -66,15 +90,20 @@ namespace filegrab
 
         public void OnCreation(object source, FileSystemEventArgs e)
         {
+            // we cannot monitor the copy destination directory
+            if (e.FullPath.StartsWith(txtCopyTo.Text, StringComparison.CurrentCultureIgnoreCase))
+                return;
+
             statusFileFound.Text = e.FullPath;
 
             if (txtCopyTo.Text != "")
             {
                 try
                 {
-                    File.Copy(e.FullPath, Path.Combine(txtCopyTo.Text, e.Name));
+                    String filename = e.Name.Substring(1 + e.Name.LastIndexOf('\\'));
+                    File.Copy(e.FullPath, Path.Combine(txtCopyTo.Text, filename));
                 }
-                catch (IOException ex) { MessageBox.Show(ex.Message); }
+                catch (IOException ex) { MessageBox.Show("copia\n" + ex.Message); }
             }
 
             if (txtFtpHost.Text == "")
@@ -186,5 +215,7 @@ namespace filegrab
         {
             statusFileFound.Text = "";
         }
+
+
     }
 }
