@@ -13,6 +13,9 @@ namespace filegrab
         List<FileSystemWatcher> watches = new List<FileSystemWatcher>();
         FtpWebRequest ftp;
 
+
+
+
         public frmMain()
         {
             InitializeComponent();
@@ -40,6 +43,8 @@ namespace filegrab
                         watch.NotifyFilter = NotifyFilters.FileName;
                         watch.Created += new FileSystemEventHandler(OnCreation);
                         watch.EnableRaisingEvents = true;
+                        if (chkRule.Checked && txtRule.Text != "" && !chkRuleRegex.Checked)
+                            watch.Filter = txtRule.Text;
                         watches.Add(watch);
                     }
                 }
@@ -51,6 +56,8 @@ namespace filegrab
             watch.IncludeSubdirectories = rbAll.Checked | chkRecursive.Enabled;
             watch.NotifyFilter = NotifyFilters.FileName;
             watch.Created += new FileSystemEventHandler(OnCreation);
+            if (chkRule.Checked && txtRule.Text != "" && !chkRuleRegex.Checked)
+                watch.Filter = txtRule.Text;
             watch.EnableRaisingEvents = true;
         }
 
@@ -116,7 +123,11 @@ namespace filegrab
                     String filename = e.Name.Substring(1 + e.Name.LastIndexOf('\\'));
                     File.Copy(e.FullPath, Path.Combine(txtCopyTo.Text, filename));
                 }
-                catch (IOException ex) { MessageBox.Show("copia\n" + ex.Message); }
+                catch (IOException ex)
+                {
+                    if (!chkHideWindow.Checked)
+                        MessageBox.Show(ex.Message);
+                }
             }
 
             if (txtFtpHost.Text == "")
