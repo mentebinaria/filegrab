@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Net;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace filegrab
 {
@@ -19,7 +20,7 @@ namespace filegrab
 
         private void rbSpecific_CheckedChanged(object sender, EventArgs e)
         {
-                txtPath.Enabled = btnPath.Enabled = chkRecursive.Enabled = rbSpecific.Checked;
+            txtPath.Enabled = btnPath.Enabled = chkRecursive.Enabled = rbSpecific.Checked;
         }
 
         public void watchStart()
@@ -60,7 +61,7 @@ namespace filegrab
 
         private void changeControls(bool state)
         {
-           groupFilesystem.Enabled = groupFtp.Enabled = chkHideWindow.Enabled = groupCopy.Enabled = state;
+            groupFilesystem.Enabled = groupFtp.Enabled = chkHideWindow.Enabled = groupCopy.Enabled = state;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -91,8 +92,20 @@ namespace filegrab
         public void OnCreation(object source, FileSystemEventArgs e)
         {
             // we cannot monitor the copy destination directory
-            if (e.FullPath.StartsWith(txtCopyTo.Text, StringComparison.CurrentCultureIgnoreCase))
+            if (txtCopyTo.Text != "" &&
+                e.FullPath.StartsWith(txtCopyTo.Text, StringComparison.CurrentCultureIgnoreCase))
                 return;
+
+            if (chkRule.Checked && txtRule.Text != "")
+            {
+                if (chkRuleRegex.Checked)
+                {
+                    Regex regex = new Regex(txtRule.Text, RegexOptions.IgnoreCase);
+
+                    if (!(chkRuleNot.Checked ^ regex.IsMatch(Path.GetFileName(e.FullPath))))
+                        return;
+                }
+            }
 
             statusFileFound.Text = e.FullPath;
 
@@ -216,6 +229,43 @@ namespace filegrab
             statusFileFound.Text = "";
         }
 
+        private void chkRule_CheckedChanged(object sender, EventArgs e)
+        {
+            txtRule.Enabled = chkRuleNot.Enabled = chkRuleRegex.Enabled = chkRule.Checked;
+        }
 
+        private void txtRule_TextChanged(object sender, EventArgs e)
+        {
+            bool invalid = false;
+
+            if (chkRuleRegex.Checked)
+            {
+                try
+                {
+                    Regex regex = new Regex(txtRule.Text);
+                }
+                catch
+                {
+                    invalid = true;
+                }
+            }
+            else
+            {
+                foreach (char p in Path.GetInvalidFileNameChars())
+                {
+                    if (p == '*' || p == '?')
+                        continue;
+
+                    if (txtRule.Text.IndexOf(p) != -1)
+                        invalid = true;
+                }
+            }
+            txtRule.BackColor = invalid ? System.Drawing.Color.LightPink : System.Drawing.Color.White;
+        }
+
+        private void chkRuleRegex_CheckedChanged(object sender, EventArgs e)
+        {
+            txtRule_TextChanged(sender, e);
+        }
     }
 }

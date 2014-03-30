@@ -62,6 +62,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusFileFound = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.chkRuleRegex = new System.Windows.Forms.CheckBox();
+            this.chkRuleNot = new System.Windows.Forms.CheckBox();
+            this.txtRule = new System.Windows.Forms.TextBox();
+            this.chkRule = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.txtFtpPort)).BeginInit();
             this.groupFtp.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -246,6 +250,10 @@
             // 
             // groupFilesystem
             // 
+            this.groupFilesystem.Controls.Add(this.chkRule);
+            this.groupFilesystem.Controls.Add(this.chkRuleRegex);
+            this.groupFilesystem.Controls.Add(this.chkRuleNot);
+            this.groupFilesystem.Controls.Add(this.txtRule);
             this.groupFilesystem.Controls.Add(this.chkRecursive);
             this.groupFilesystem.Controls.Add(this.txtPath);
             this.groupFilesystem.Controls.Add(this.rbAll);
@@ -421,6 +429,50 @@
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
             // 
+            // chkRuleRegex
+            // 
+            this.chkRuleRegex.AutoSize = true;
+            this.chkRuleRegex.Enabled = false;
+            this.chkRuleRegex.Location = new System.Drawing.Point(318, 160);
+            this.chkRuleRegex.Name = "chkRuleRegex";
+            this.chkRuleRegex.Size = new System.Drawing.Size(144, 21);
+            this.chkRuleRegex.TabIndex = 16;
+            this.chkRuleRegex.Text = "Regular Expression";
+            this.chkRuleRegex.UseVisualStyleBackColor = true;
+            this.chkRuleRegex.CheckedChanged += new System.EventHandler(this.chkRuleRegex_CheckedChanged);
+            // 
+            // chkRuleNot
+            // 
+            this.chkRuleNot.AutoSize = true;
+            this.chkRuleNot.Enabled = false;
+            this.chkRuleNot.Location = new System.Drawing.Point(261, 160);
+            this.chkRuleNot.Name = "chkRuleNot";
+            this.chkRuleNot.Size = new System.Drawing.Size(51, 21);
+            this.chkRuleNot.TabIndex = 15;
+            this.chkRuleNot.Text = "Not";
+            this.chkRuleNot.UseVisualStyleBackColor = true;
+            // 
+            // txtRule
+            // 
+            this.txtRule.Enabled = false;
+            this.txtRule.Location = new System.Drawing.Point(14, 158);
+            this.txtRule.Name = "txtRule";
+            this.txtRule.Size = new System.Drawing.Size(230, 23);
+            this.txtRule.TabIndex = 14;
+            this.txtRule.TextChanged += new System.EventHandler(this.txtRule_TextChanged);
+            // 
+            // chkRule
+            // 
+            this.chkRule.AutoSize = true;
+            this.chkRule.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkRule.Location = new System.Drawing.Point(14, 131);
+            this.chkRule.Name = "chkRule";
+            this.chkRule.Size = new System.Drawing.Size(159, 21);
+            this.chkRule.TabIndex = 17;
+            this.chkRule.Text = "Filename match rule";
+            this.chkRule.UseVisualStyleBackColor = true;
+            this.chkRule.CheckedChanged += new System.EventHandler(this.chkRule_CheckedChanged);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -490,6 +542,10 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage tabAdvanced;
+        private System.Windows.Forms.CheckBox chkRule;
+        private System.Windows.Forms.CheckBox chkRuleRegex;
+        private System.Windows.Forms.CheckBox chkRuleNot;
+        private System.Windows.Forms.TextBox txtRule;
     }
 }
 
