@@ -120,12 +120,14 @@ namespace filegrab
             {
                 try
                 {
+                    if (!File.Exists(e.FullPath))
+                        return;
                     String filename = e.Name.Substring(1 + e.Name.LastIndexOf('\\'));
                     File.Copy(e.FullPath, Path.Combine(txtCopyTo.Text, filename));
                 }
                 catch (IOException ex)
                 {
-                    if (!chkHideWindow.Checked)
+                    if (!chkIgnoreErrors.Checked)
                         MessageBox.Show(ex.Message);
                 }
             }
@@ -154,7 +156,8 @@ namespace filegrab
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    if (!chkIgnoreErrors.Checked)
+                        MessageBox.Show(ex.ToString());
                 }
             }
 

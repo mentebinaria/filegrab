@@ -46,6 +46,10 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabMonitor = new System.Windows.Forms.TabPage();
             this.groupFilesystem = new System.Windows.Forms.GroupBox();
+            this.chkRule = new System.Windows.Forms.CheckBox();
+            this.chkRuleRegex = new System.Windows.Forms.CheckBox();
+            this.chkRuleNot = new System.Windows.Forms.CheckBox();
+            this.txtRule = new System.Windows.Forms.TextBox();
             this.chkRecursive = new System.Windows.Forms.CheckBox();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.rbAll = new System.Windows.Forms.RadioButton();
@@ -62,10 +66,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusFileFound = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.chkRuleRegex = new System.Windows.Forms.CheckBox();
-            this.chkRuleNot = new System.Windows.Forms.CheckBox();
-            this.txtRule = new System.Windows.Forms.TextBox();
-            this.chkRule = new System.Windows.Forms.CheckBox();
+            this.chkIgnoreErrors = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.txtFtpPort)).BeginInit();
             this.groupFtp.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -73,6 +74,7 @@
             this.groupFilesystem.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.groupCopy.SuspendLayout();
+            this.tabAdvanced.SuspendLayout();
             this.tabAbout.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -267,6 +269,50 @@
             this.groupFilesystem.TabStop = false;
             this.groupFilesystem.Text = "Filesystem";
             // 
+            // chkRule
+            // 
+            this.chkRule.AutoSize = true;
+            this.chkRule.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkRule.Location = new System.Drawing.Point(14, 131);
+            this.chkRule.Name = "chkRule";
+            this.chkRule.Size = new System.Drawing.Size(159, 21);
+            this.chkRule.TabIndex = 17;
+            this.chkRule.Text = "Filename match rule";
+            this.chkRule.UseVisualStyleBackColor = true;
+            this.chkRule.CheckedChanged += new System.EventHandler(this.chkRule_CheckedChanged);
+            // 
+            // chkRuleRegex
+            // 
+            this.chkRuleRegex.AutoSize = true;
+            this.chkRuleRegex.Enabled = false;
+            this.chkRuleRegex.Location = new System.Drawing.Point(318, 160);
+            this.chkRuleRegex.Name = "chkRuleRegex";
+            this.chkRuleRegex.Size = new System.Drawing.Size(144, 21);
+            this.chkRuleRegex.TabIndex = 16;
+            this.chkRuleRegex.Text = "Regular Expression";
+            this.chkRuleRegex.UseVisualStyleBackColor = true;
+            this.chkRuleRegex.CheckedChanged += new System.EventHandler(this.chkRuleRegex_CheckedChanged);
+            // 
+            // chkRuleNot
+            // 
+            this.chkRuleNot.AutoSize = true;
+            this.chkRuleNot.Enabled = false;
+            this.chkRuleNot.Location = new System.Drawing.Point(261, 160);
+            this.chkRuleNot.Name = "chkRuleNot";
+            this.chkRuleNot.Size = new System.Drawing.Size(51, 21);
+            this.chkRuleNot.TabIndex = 15;
+            this.chkRuleNot.Text = "Not";
+            this.chkRuleNot.UseVisualStyleBackColor = true;
+            // 
+            // txtRule
+            // 
+            this.txtRule.Enabled = false;
+            this.txtRule.Location = new System.Drawing.Point(14, 158);
+            this.txtRule.Name = "txtRule";
+            this.txtRule.Size = new System.Drawing.Size(230, 23);
+            this.txtRule.TabIndex = 14;
+            this.txtRule.TextChanged += new System.EventHandler(this.txtRule_TextChanged);
+            // 
             // chkRecursive
             // 
             this.chkRecursive.AutoSize = true;
@@ -380,6 +426,7 @@
             // 
             // tabAdvanced
             // 
+            this.tabAdvanced.Controls.Add(this.chkIgnoreErrors);
             this.tabAdvanced.Location = new System.Drawing.Point(4, 29);
             this.tabAdvanced.Name = "tabAdvanced";
             this.tabAdvanced.Size = new System.Drawing.Size(490, 216);
@@ -429,49 +476,17 @@
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
             // 
-            // chkRuleRegex
+            // chkIgnoreErrors
             // 
-            this.chkRuleRegex.AutoSize = true;
-            this.chkRuleRegex.Enabled = false;
-            this.chkRuleRegex.Location = new System.Drawing.Point(318, 160);
-            this.chkRuleRegex.Name = "chkRuleRegex";
-            this.chkRuleRegex.Size = new System.Drawing.Size(144, 21);
-            this.chkRuleRegex.TabIndex = 16;
-            this.chkRuleRegex.Text = "Regular Expression";
-            this.chkRuleRegex.UseVisualStyleBackColor = true;
-            this.chkRuleRegex.CheckedChanged += new System.EventHandler(this.chkRuleRegex_CheckedChanged);
-            // 
-            // chkRuleNot
-            // 
-            this.chkRuleNot.AutoSize = true;
-            this.chkRuleNot.Enabled = false;
-            this.chkRuleNot.Location = new System.Drawing.Point(261, 160);
-            this.chkRuleNot.Name = "chkRuleNot";
-            this.chkRuleNot.Size = new System.Drawing.Size(51, 21);
-            this.chkRuleNot.TabIndex = 15;
-            this.chkRuleNot.Text = "Not";
-            this.chkRuleNot.UseVisualStyleBackColor = true;
-            // 
-            // txtRule
-            // 
-            this.txtRule.Enabled = false;
-            this.txtRule.Location = new System.Drawing.Point(14, 158);
-            this.txtRule.Name = "txtRule";
-            this.txtRule.Size = new System.Drawing.Size(230, 23);
-            this.txtRule.TabIndex = 14;
-            this.txtRule.TextChanged += new System.EventHandler(this.txtRule_TextChanged);
-            // 
-            // chkRule
-            // 
-            this.chkRule.AutoSize = true;
-            this.chkRule.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkRule.Location = new System.Drawing.Point(14, 131);
-            this.chkRule.Name = "chkRule";
-            this.chkRule.Size = new System.Drawing.Size(159, 21);
-            this.chkRule.TabIndex = 17;
-            this.chkRule.Text = "Filename match rule";
-            this.chkRule.UseVisualStyleBackColor = true;
-            this.chkRule.CheckedChanged += new System.EventHandler(this.chkRule_CheckedChanged);
+            this.chkIgnoreErrors.AutoSize = true;
+            this.chkIgnoreErrors.Checked = true;
+            this.chkIgnoreErrors.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkIgnoreErrors.Location = new System.Drawing.Point(15, 8);
+            this.chkIgnoreErrors.Name = "chkIgnoreErrors";
+            this.chkIgnoreErrors.Size = new System.Drawing.Size(106, 21);
+            this.chkIgnoreErrors.TabIndex = 0;
+            this.chkIgnoreErrors.Text = "Ignore errors";
+            this.chkIgnoreErrors.UseVisualStyleBackColor = true;
             // 
             // frmMain
             // 
@@ -498,6 +513,8 @@
             this.tabCapture.ResumeLayout(false);
             this.groupCopy.ResumeLayout(false);
             this.groupCopy.PerformLayout();
+            this.tabAdvanced.ResumeLayout(false);
+            this.tabAdvanced.PerformLayout();
             this.tabAbout.ResumeLayout(false);
             this.tabAbout.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -546,6 +563,7 @@
         private System.Windows.Forms.CheckBox chkRuleRegex;
         private System.Windows.Forms.CheckBox chkRuleNot;
         private System.Windows.Forms.TextBox txtRule;
+        private System.Windows.Forms.CheckBox chkIgnoreErrors;
     }
 }
 
