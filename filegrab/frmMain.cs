@@ -13,9 +13,6 @@ namespace filegrab
         List<FileSystemWatcher> watches = new List<FileSystemWatcher>();
         FtpWebRequest ftp;
 
-
-
-
         public frmMain()
         {
             InitializeComponent();
@@ -38,6 +35,7 @@ namespace filegrab
                     if (d.DriveType == DriveType.Fixed)
                     {
                         watch = new FileSystemWatcher();
+                        watch.InternalBufferSize = (int) cbReadBufferSize.SelectedItem;
                         watch.Path = d.RootDirectory.ToString();
                         watch.IncludeSubdirectories = true;
                         watch.NotifyFilter = NotifyFilters.FileName;
@@ -52,6 +50,7 @@ namespace filegrab
             }
 
             watch = new FileSystemWatcher();
+            watch.InternalBufferSize = Convert.ToInt32(cbReadBufferSize.SelectedItem);
             watch.Path = txtPath.Text;
             watch.IncludeSubdirectories = rbAll.Checked | chkRecursive.Enabled;
             watch.NotifyFilter = NotifyFilters.FileName;
@@ -73,6 +72,12 @@ namespace filegrab
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            if (chkRule.Checked && txtRule.Text == "")
+            {
+                txtRule.BackColor = System.Drawing.Color.LightPink;
+                return;
+            }
+
             if (chkHideWindow.Checked)
             {
                 frmMain.ActiveForm.ShowInTaskbar = false;
@@ -123,11 +128,21 @@ namespace filegrab
                     if (!File.Exists(e.FullPath))
                         return;
                     String filename = e.Name.Substring(1 + e.Name.LastIndexOf('\\'));
-                    File.Copy(e.FullPath, Path.Combine(txtCopyTo.Text, filename));
+                    String dstFile = Path.Combine(txtCopyTo.Text, filename);
+                    File.Copy(e.FullPath, dstFile, chkWriteOverwrite.Checked);
+                    File.SetAttributes(dstFile, FileAttributes.Normal); // remove read-only, hidden, etc
+
+                    if (chkWritePreserveTimes.Checked)
+                    {
+                        File.SetCreationTime(dstFile, File.GetCreationTime(e.FullPath));
+                        File.SetLastAccessTime(dstFile, File.GetLastAccessTime(e.FullPath));
+                        File.SetLastWriteTime(dstFile, File.GetLastWriteTime(e.FullPath));
+                    }
+
                 }
                 catch (IOException ex)
                 {
-                    if (!chkIgnoreErrors.Checked)
+                    if (!chkReadIgnoreErrors.Checked)
                         MessageBox.Show(ex.Message);
                 }
             }
@@ -156,7 +171,7 @@ namespace filegrab
                 }
                 catch (Exception ex)
                 {
-                    if (!chkIgnoreErrors.Checked)
+                    if (!chkReadIgnoreErrors.Checked)
                         MessageBox.Show(ex.ToString());
                 }
             }
@@ -167,7 +182,8 @@ namespace filegrab
         private void btnPath_Click(object sender, EventArgs e)
         {
             folderDlg.ShowDialog();
-            txtPath.Text = folderDlg.SelectedPath;
+            if (folderDlg.SelectedPath != "")
+                txtPath.Text = folderDlg.SelectedPath;
         }
 
         private void chkFtpAnonymous_CheckedChanged(object sender, EventArgs e)
@@ -223,7 +239,7 @@ namespace filegrab
             try
             {
                 ftp.GetResponse();
-                MessageBox.Show("Connection success!", "FTP test", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Connection succeeded!", "FTP test", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (WebException ex)
             {
@@ -235,17 +251,27 @@ namespace filegrab
         private void btnCopyToBrowse_Click(object sender, EventArgs e)
         {
             folderDlg.ShowDialog();
-            txtCopyTo.Text = folderDlg.SelectedPath;
+            if (folderDlg.SelectedPath != "")
+                txtCopyTo.Text = folderDlg.SelectedPath;
         }
 
         private void frmMain_Load(object sender, EventArgs e)
         {
             statusFileFound.Text = "";
+            txtPath.Text = Directory.GetCurrentDirectory();
+            folderDlg.SelectedPath = txtPath.Text;
+            cbReadBufferSize.SelectedItem = cbReadBufferSize.Items[cbReadBufferSize.Items.Count / 2];
         }
 
         private void chkRule_CheckedChanged(object sender, EventArgs e)
         {
-            txtRule.Enabled = chkRuleNot.Enabled = chkRuleRegex.Enabled = chkRule.Checked;
+            txtRule.Enabled = chkRuleRegex.Enabled = chkRule.Checked;
+            chkRuleNot.Enabled = chkRuleRegex.Checked & chkRule.Checked;
+            if (!chkRule.Checked)
+            {
+                btnStart.Enabled = true;
+                txtRule.BackColor = System.Drawing.Color.White;
+            }
         }
 
         private void txtRule_TextChanged(object sender, EventArgs e)
@@ -267,19 +293,41 @@ namespace filegrab
             {
                 foreach (char p in Path.GetInvalidFileNameChars())
                 {
-                    if (p == '*' || p == '?')
+                    if (p == '*' || p == '?' || p == '\\')
                         continue;
 
                     if (txtRule.Text.IndexOf(p) != -1)
                         invalid = true;
                 }
             }
+            
+            if (txtRule.Text == "")
+                invalid = true;
+            
             txtRule.BackColor = invalid ? System.Drawing.Color.LightPink : System.Drawing.Color.White;
+            btnStart.Enabled = !invalid;
         }
 
         private void chkRuleRegex_CheckedChanged(object sender, EventArgs e)
         {
-            txtRule_TextChanged(sender, e);
+            if (chkRuleRegex.Checked)
+                txtRule_TextChanged(sender, e);
+            else
+                txtRule.BackColor = System.Drawing.Color.White;
+            chkRuleNot.Enabled = chkRuleRegex.Checked;
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "You can set the format using the following variables:\n\n" +
+                "%{name}\t- the file name without extension\n" +
+                "%{ext}\t- the file extension\n" +
+                "%{md5}\t- the file MD5 hash\n" +
+                "%{sha1}\t- the file SHA1 hash\n" +
+                "%{sha256}\t- the file SHA-256 hash\n"
+            );
+        }
+
     }
 }

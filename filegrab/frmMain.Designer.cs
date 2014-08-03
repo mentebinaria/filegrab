@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.btnStart = new System.Windows.Forms.Button();
             this.folderDlg = new System.Windows.Forms.FolderBrowserDialog();
@@ -61,12 +62,25 @@
             this.btnCopyToBrowse = new System.Windows.Forms.Button();
             this.lblLocation = new System.Windows.Forms.Label();
             this.tabAdvanced = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkWriteCreateDirTree = new System.Windows.Forms.CheckBox();
+            this.chkWriteOverwrite = new System.Windows.Forms.CheckBox();
+            this.txtWriteFilenameFormat = new System.Windows.Forms.TextBox();
+            this.lblFilenameFormat = new System.Windows.Forms.Label();
+            this.grpAdvFile = new System.Windows.Forms.GroupBox();
+            this.lblBufferSize = new System.Windows.Forms.Label();
+            this.chkReadPreserveAccess = new System.Windows.Forms.CheckBox();
+            this.chkReadIgnoreErrors = new System.Windows.Forms.CheckBox();
             this.tabAbout = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.lblAbout = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusFileFound = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.chkIgnoreErrors = new System.Windows.Forms.CheckBox();
+            this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
+            this.ttWarn = new System.Windows.Forms.ToolTip(this.components);
+            this.cbReadBufferSize = new System.Windows.Forms.ComboBox();
+            this.chkWritePreserveTimes = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.txtFtpPort)).BeginInit();
             this.groupFtp.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -75,6 +89,8 @@
             this.tabCapture.SuspendLayout();
             this.groupCopy.SuspendLayout();
             this.tabAdvanced.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.grpAdvFile.SuspendLayout();
             this.tabAbout.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -275,9 +291,9 @@
             this.chkRule.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkRule.Location = new System.Drawing.Point(14, 131);
             this.chkRule.Name = "chkRule";
-            this.chkRule.Size = new System.Drawing.Size(159, 21);
+            this.chkRule.Size = new System.Drawing.Size(179, 21);
             this.chkRule.TabIndex = 17;
-            this.chkRule.Text = "Filename match rule";
+            this.chkRule.Text = "Filename matching rule";
             this.chkRule.UseVisualStyleBackColor = true;
             this.chkRule.CheckedChanged += new System.EventHandler(this.chkRule_CheckedChanged);
             // 
@@ -285,7 +301,7 @@
             // 
             this.chkRuleRegex.AutoSize = true;
             this.chkRuleRegex.Enabled = false;
-            this.chkRuleRegex.Location = new System.Drawing.Point(318, 160);
+            this.chkRuleRegex.Location = new System.Drawing.Point(261, 158);
             this.chkRuleRegex.Name = "chkRuleRegex";
             this.chkRuleRegex.Size = new System.Drawing.Size(144, 21);
             this.chkRuleRegex.TabIndex = 16;
@@ -297,7 +313,7 @@
             // 
             this.chkRuleNot.AutoSize = true;
             this.chkRuleNot.Enabled = false;
-            this.chkRuleNot.Location = new System.Drawing.Point(261, 160);
+            this.chkRuleNot.Location = new System.Drawing.Point(410, 160);
             this.chkRuleNot.Name = "chkRuleNot";
             this.chkRuleNot.Size = new System.Drawing.Size(51, 21);
             this.chkRuleNot.TabIndex = 15;
@@ -333,6 +349,7 @@
             this.txtPath.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPath.Location = new System.Drawing.Point(13, 75);
             this.txtPath.Name = "txtPath";
+            this.txtPath.ReadOnly = true;
             this.txtPath.Size = new System.Drawing.Size(413, 23);
             this.txtPath.TabIndex = 2;
             // 
@@ -401,6 +418,7 @@
             this.txtCopyTo.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCopyTo.Location = new System.Drawing.Point(89, 22);
             this.txtCopyTo.Name = "txtCopyTo";
+            this.txtCopyTo.ReadOnly = true;
             this.txtCopyTo.Size = new System.Drawing.Size(338, 23);
             this.txtCopyTo.TabIndex = 13;
             // 
@@ -426,7 +444,8 @@
             // 
             // tabAdvanced
             // 
-            this.tabAdvanced.Controls.Add(this.chkIgnoreErrors);
+            this.tabAdvanced.Controls.Add(this.grpAdvFile);
+            this.tabAdvanced.Controls.Add(this.groupBox1);
             this.tabAdvanced.Location = new System.Drawing.Point(4, 29);
             this.tabAdvanced.Name = "tabAdvanced";
             this.tabAdvanced.Size = new System.Drawing.Size(490, 216);
@@ -434,9 +453,113 @@
             this.tabAdvanced.Text = "Advanced";
             this.tabAdvanced.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.chkWritePreserveTimes);
+            this.groupBox1.Controls.Add(this.chkWriteCreateDirTree);
+            this.groupBox1.Controls.Add(this.chkWriteOverwrite);
+            this.groupBox1.Controls.Add(this.txtWriteFilenameFormat);
+            this.groupBox1.Controls.Add(this.lblFilenameFormat);
+            this.groupBox1.Location = new System.Drawing.Point(7, 86);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(477, 98);
+            this.groupBox1.TabIndex = 16;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Writing";
+            // 
+            // chkWriteCreateDirTree
+            // 
+            this.chkWriteCreateDirTree.AutoSize = true;
+            this.chkWriteCreateDirTree.Enabled = false;
+            this.chkWriteCreateDirTree.Location = new System.Drawing.Point(14, 71);
+            this.chkWriteCreateDirTree.Name = "chkWriteCreateDirTree";
+            this.chkWriteCreateDirTree.Size = new System.Drawing.Size(161, 21);
+            this.chkWriteCreateDirTree.TabIndex = 14;
+            this.chkWriteCreateDirTree.Text = "Create directory tree";
+            this.chkWriteCreateDirTree.UseVisualStyleBackColor = true;
+            // 
+            // chkWriteOverwrite
+            // 
+            this.chkWriteOverwrite.AutoSize = true;
+            this.chkWriteOverwrite.Checked = true;
+            this.chkWriteOverwrite.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkWriteOverwrite.Location = new System.Drawing.Point(15, 48);
+            this.chkWriteOverwrite.Name = "chkWriteOverwrite";
+            this.chkWriteOverwrite.Size = new System.Drawing.Size(230, 21);
+            this.chkWriteOverwrite.TabIndex = 0;
+            this.chkWriteOverwrite.Text = "Overwrite files with same name";
+            this.chkWriteOverwrite.UseVisualStyleBackColor = true;
+            // 
+            // txtWriteFilenameFormat
+            // 
+            this.txtWriteFilenameFormat.Enabled = false;
+            this.txtWriteFilenameFormat.Location = new System.Drawing.Point(126, 19);
+            this.txtWriteFilenameFormat.Name = "txtWriteFilenameFormat";
+            this.txtWriteFilenameFormat.Size = new System.Drawing.Size(335, 23);
+            this.txtWriteFilenameFormat.TabIndex = 12;
+            this.txtWriteFilenameFormat.Text = "%{name}.%{ext}";
+            this.ttInfo.SetToolTip(this.txtWriteFilenameFormat, "Available variables are:\r\n\r\n%{name} for file name without extension\r\n%{ext} for f" +
+        "ile extension\r\n%{sha} for the file SHA1 hash");
+            // 
+            // lblFilenameFormat
+            // 
+            this.lblFilenameFormat.AutoSize = true;
+            this.lblFilenameFormat.Enabled = false;
+            this.lblFilenameFormat.Location = new System.Drawing.Point(12, 22);
+            this.lblFilenameFormat.Name = "lblFilenameFormat";
+            this.lblFilenameFormat.Size = new System.Drawing.Size(114, 17);
+            this.lblFilenameFormat.TabIndex = 11;
+            this.lblFilenameFormat.Text = "Filename format";
+            // 
+            // grpAdvFile
+            // 
+            this.grpAdvFile.Controls.Add(this.cbReadBufferSize);
+            this.grpAdvFile.Controls.Add(this.lblBufferSize);
+            this.grpAdvFile.Controls.Add(this.chkReadPreserveAccess);
+            this.grpAdvFile.Controls.Add(this.chkReadIgnoreErrors);
+            this.grpAdvFile.Location = new System.Drawing.Point(7, 3);
+            this.grpAdvFile.Name = "grpAdvFile";
+            this.grpAdvFile.Size = new System.Drawing.Size(477, 77);
+            this.grpAdvFile.TabIndex = 10;
+            this.grpAdvFile.TabStop = false;
+            this.grpAdvFile.Text = "Reading";
+            // 
+            // lblBufferSize
+            // 
+            this.lblBufferSize.AutoSize = true;
+            this.lblBufferSize.Location = new System.Drawing.Point(299, 23);
+            this.lblBufferSize.Name = "lblBufferSize";
+            this.lblBufferSize.Size = new System.Drawing.Size(97, 17);
+            this.lblBufferSize.TabIndex = 2;
+            this.lblBufferSize.Text = "Buffer size (KB)";
+            // 
+            // chkReadPreserveAccess
+            // 
+            this.chkReadPreserveAccess.AutoSize = true;
+            this.chkReadPreserveAccess.Enabled = false;
+            this.chkReadPreserveAccess.Location = new System.Drawing.Point(15, 49);
+            this.chkReadPreserveAccess.Name = "chkReadPreserveAccess";
+            this.chkReadPreserveAccess.Size = new System.Drawing.Size(226, 21);
+            this.chkReadPreserveAccess.TabIndex = 1;
+            this.chkReadPreserveAccess.Text = "Do not update file access time";
+            this.chkReadPreserveAccess.UseVisualStyleBackColor = true;
+            // 
+            // chkReadIgnoreErrors
+            // 
+            this.chkReadIgnoreErrors.AutoSize = true;
+            this.chkReadIgnoreErrors.Checked = true;
+            this.chkReadIgnoreErrors.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkReadIgnoreErrors.Location = new System.Drawing.Point(15, 22);
+            this.chkReadIgnoreErrors.Name = "chkReadIgnoreErrors";
+            this.chkReadIgnoreErrors.Size = new System.Drawing.Size(160, 21);
+            this.chkReadIgnoreErrors.TabIndex = 0;
+            this.chkReadIgnoreErrors.Text = "Ignore reading errors";
+            this.chkReadIgnoreErrors.UseVisualStyleBackColor = true;
+            // 
             // tabAbout
             // 
-            this.tabAbout.Controls.Add(this.label1);
+            this.tabAbout.Controls.Add(this.linkLabel1);
+            this.tabAbout.Controls.Add(this.lblAbout);
             this.tabAbout.Location = new System.Drawing.Point(4, 29);
             this.tabAbout.Name = "tabAbout";
             this.tabAbout.Padding = new System.Windows.Forms.Padding(3);
@@ -445,14 +568,24 @@
             this.tabAbout.Text = "About";
             this.tabAbout.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // linkLabel1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(421, 153);
-            this.label1.TabIndex = 0;
-            this.label1.Text = resources.GetString("label1.Text");
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(6, 175);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(178, 17);
+            this.linkLabel1.TabIndex = 1;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Visit Mente Binária website";
+            // 
+            // lblAbout
+            // 
+            this.lblAbout.AutoSize = true;
+            this.lblAbout.Location = new System.Drawing.Point(6, 13);
+            this.lblAbout.Name = "lblAbout";
+            this.lblAbout.Size = new System.Drawing.Size(407, 136);
+            this.lblAbout.TabIndex = 0;
+            this.lblAbout.Text = resources.GetString("lblAbout.Text");
             // 
             // statusStrip1
             // 
@@ -476,17 +609,45 @@
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
             // 
-            // chkIgnoreErrors
+            // ttInfo
             // 
-            this.chkIgnoreErrors.AutoSize = true;
-            this.chkIgnoreErrors.Checked = true;
-            this.chkIgnoreErrors.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkIgnoreErrors.Location = new System.Drawing.Point(15, 8);
-            this.chkIgnoreErrors.Name = "chkIgnoreErrors";
-            this.chkIgnoreErrors.Size = new System.Drawing.Size(106, 21);
-            this.chkIgnoreErrors.TabIndex = 0;
-            this.chkIgnoreErrors.Text = "Ignore errors";
-            this.chkIgnoreErrors.UseVisualStyleBackColor = true;
+            this.ttInfo.IsBalloon = true;
+            this.ttInfo.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.ttInfo.ToolTipTitle = "Help";
+            // 
+            // ttWarn
+            // 
+            this.ttWarn.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
+            this.ttWarn.ToolTipTitle = "Attention";
+            // 
+            // cbReadBufferSize
+            // 
+            this.cbReadBufferSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbReadBufferSize.DropDownWidth = 30;
+            this.cbReadBufferSize.FormattingEnabled = true;
+            this.cbReadBufferSize.Items.AddRange(new object[] {
+            "4",
+            "8",
+            "16",
+            "32",
+            "64"});
+            this.cbReadBufferSize.Location = new System.Drawing.Point(402, 20);
+            this.cbReadBufferSize.Name = "cbReadBufferSize";
+            this.cbReadBufferSize.Size = new System.Drawing.Size(57, 25);
+            this.cbReadBufferSize.TabIndex = 3;
+            this.ttWarn.SetToolTip(this.cbReadBufferSize, "Change it if you know exactly what you\'re doing.");
+            // 
+            // chkWritePreserveTimes
+            // 
+            this.chkWritePreserveTimes.AutoSize = true;
+            this.chkWritePreserveTimes.Checked = true;
+            this.chkWritePreserveTimes.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkWritePreserveTimes.Location = new System.Drawing.Point(302, 48);
+            this.chkWritePreserveTimes.Name = "chkWritePreserveTimes";
+            this.chkWritePreserveTimes.Size = new System.Drawing.Size(159, 21);
+            this.chkWritePreserveTimes.TabIndex = 15;
+            this.chkWritePreserveTimes.Text = "Preserve timestamps";
+            this.chkWritePreserveTimes.UseVisualStyleBackColor = true;
             // 
             // frmMain
             // 
@@ -514,7 +675,10 @@
             this.groupCopy.ResumeLayout(false);
             this.groupCopy.PerformLayout();
             this.tabAdvanced.ResumeLayout(false);
-            this.tabAdvanced.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.grpAdvFile.ResumeLayout(false);
+            this.grpAdvFile.PerformLayout();
             this.tabAbout.ResumeLayout(false);
             this.tabAbout.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -557,13 +721,26 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel statusFileFound;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblAbout;
         private System.Windows.Forms.TabPage tabAdvanced;
         private System.Windows.Forms.CheckBox chkRule;
         private System.Windows.Forms.CheckBox chkRuleRegex;
         private System.Windows.Forms.CheckBox chkRuleNot;
         private System.Windows.Forms.TextBox txtRule;
-        private System.Windows.Forms.CheckBox chkIgnoreErrors;
+        private System.Windows.Forms.CheckBox chkReadIgnoreErrors;
+        private System.Windows.Forms.GroupBox grpAdvFile;
+        private System.Windows.Forms.ToolTip ttInfo;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox chkWriteCreateDirTree;
+        private System.Windows.Forms.CheckBox chkWriteOverwrite;
+        private System.Windows.Forms.TextBox txtWriteFilenameFormat;
+        private System.Windows.Forms.Label lblFilenameFormat;
+        private System.Windows.Forms.Label lblBufferSize;
+        private System.Windows.Forms.CheckBox chkReadPreserveAccess;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.ToolTip ttWarn;
+        private System.Windows.Forms.ComboBox cbReadBufferSize;
+        private System.Windows.Forms.CheckBox chkWritePreserveTimes;
     }
 }
 
