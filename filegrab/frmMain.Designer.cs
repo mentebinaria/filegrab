@@ -44,7 +44,7 @@
             this.lblFtpUser = new System.Windows.Forms.Label();
             this.lblFtpPort = new System.Windows.Forms.Label();
             this.lblFtpHost = new System.Windows.Forms.Label();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControl = new System.Windows.Forms.TabControl();
             this.tabMonitor = new System.Windows.Forms.TabPage();
             this.groupFilesystem = new System.Windows.Forms.GroupBox();
             this.chkRule = new System.Windows.Forms.CheckBox();
@@ -62,35 +62,35 @@
             this.btnCopyToBrowse = new System.Windows.Forms.Button();
             this.lblLocation = new System.Windows.Forms.Label();
             this.tabAdvanced = new System.Windows.Forms.TabPage();
+            this.grpAdvFile = new System.Windows.Forms.GroupBox();
+            this.cbReadBufferSize = new System.Windows.Forms.ComboBox();
+            this.lblBufferSize = new System.Windows.Forms.Label();
+            this.chkReadPreserveAccess = new System.Windows.Forms.CheckBox();
+            this.chkReadIgnoreErrors = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkWritePreserveTimes = new System.Windows.Forms.CheckBox();
             this.chkWriteCreateDirTree = new System.Windows.Forms.CheckBox();
             this.chkWriteOverwrite = new System.Windows.Forms.CheckBox();
             this.txtWriteFilenameFormat = new System.Windows.Forms.TextBox();
             this.lblFilenameFormat = new System.Windows.Forms.Label();
-            this.grpAdvFile = new System.Windows.Forms.GroupBox();
-            this.lblBufferSize = new System.Windows.Forms.Label();
-            this.chkReadPreserveAccess = new System.Windows.Forms.CheckBox();
-            this.chkReadIgnoreErrors = new System.Windows.Forms.CheckBox();
             this.tabAbout = new System.Windows.Forms.TabPage();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.lblAbout = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusFileFound = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
             this.ttWarn = new System.Windows.Forms.ToolTip(this.components);
-            this.cbReadBufferSize = new System.Windows.Forms.ComboBox();
-            this.chkWritePreserveTimes = new System.Windows.Forms.CheckBox();
+            this.linkWiki = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.txtFtpPort)).BeginInit();
             this.groupFtp.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.tabControl.SuspendLayout();
             this.tabMonitor.SuspendLayout();
             this.groupFilesystem.SuspendLayout();
             this.tabCapture.SuspendLayout();
             this.groupCopy.SuspendLayout();
             this.tabAdvanced.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.grpAdvFile.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.tabAbout.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -241,19 +241,19 @@
             this.lblFtpHost.TabIndex = 7;
             this.lblFtpHost.Text = "Host";
             // 
-            // tabControl1
+            // tabControl
             // 
-            this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabControl1.Controls.Add(this.tabMonitor);
-            this.tabControl1.Controls.Add(this.tabCapture);
-            this.tabControl1.Controls.Add(this.tabAdvanced);
-            this.tabControl1.Controls.Add(this.tabAbout);
-            this.tabControl1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.tabControl1.Location = new System.Drawing.Point(8, 12);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(498, 249);
-            this.tabControl1.TabIndex = 12;
+            this.tabControl.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tabControl.Controls.Add(this.tabMonitor);
+            this.tabControl.Controls.Add(this.tabCapture);
+            this.tabControl.Controls.Add(this.tabAdvanced);
+            this.tabControl.Controls.Add(this.tabAbout);
+            this.tabControl.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.tabControl.Location = new System.Drawing.Point(8, 12);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(498, 249);
+            this.tabControl.TabIndex = 12;
             // 
             // tabMonitor
             // 
@@ -453,6 +453,68 @@
             this.tabAdvanced.Text = "Advanced";
             this.tabAdvanced.UseVisualStyleBackColor = true;
             // 
+            // grpAdvFile
+            // 
+            this.grpAdvFile.Controls.Add(this.cbReadBufferSize);
+            this.grpAdvFile.Controls.Add(this.lblBufferSize);
+            this.grpAdvFile.Controls.Add(this.chkReadPreserveAccess);
+            this.grpAdvFile.Controls.Add(this.chkReadIgnoreErrors);
+            this.grpAdvFile.Location = new System.Drawing.Point(7, 3);
+            this.grpAdvFile.Name = "grpAdvFile";
+            this.grpAdvFile.Size = new System.Drawing.Size(477, 77);
+            this.grpAdvFile.TabIndex = 10;
+            this.grpAdvFile.TabStop = false;
+            this.grpAdvFile.Text = "Reading";
+            // 
+            // cbReadBufferSize
+            // 
+            this.cbReadBufferSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbReadBufferSize.DropDownWidth = 30;
+            this.cbReadBufferSize.FormattingEnabled = true;
+            this.cbReadBufferSize.Items.AddRange(new object[] {
+            "4",
+            "8",
+            "16",
+            "32",
+            "64"});
+            this.cbReadBufferSize.Location = new System.Drawing.Point(402, 20);
+            this.cbReadBufferSize.Name = "cbReadBufferSize";
+            this.cbReadBufferSize.Size = new System.Drawing.Size(57, 25);
+            this.cbReadBufferSize.TabIndex = 3;
+            this.ttWarn.SetToolTip(this.cbReadBufferSize, "Change it if you know exactly what you\'re doing.");
+            // 
+            // lblBufferSize
+            // 
+            this.lblBufferSize.AutoSize = true;
+            this.lblBufferSize.Location = new System.Drawing.Point(299, 23);
+            this.lblBufferSize.Name = "lblBufferSize";
+            this.lblBufferSize.Size = new System.Drawing.Size(97, 17);
+            this.lblBufferSize.TabIndex = 2;
+            this.lblBufferSize.Text = "Buffer size (KB)";
+            // 
+            // chkReadPreserveAccess
+            // 
+            this.chkReadPreserveAccess.AutoSize = true;
+            this.chkReadPreserveAccess.Enabled = false;
+            this.chkReadPreserveAccess.Location = new System.Drawing.Point(15, 49);
+            this.chkReadPreserveAccess.Name = "chkReadPreserveAccess";
+            this.chkReadPreserveAccess.Size = new System.Drawing.Size(226, 21);
+            this.chkReadPreserveAccess.TabIndex = 1;
+            this.chkReadPreserveAccess.Text = "Do not update file access time";
+            this.chkReadPreserveAccess.UseVisualStyleBackColor = true;
+            // 
+            // chkReadIgnoreErrors
+            // 
+            this.chkReadIgnoreErrors.AutoSize = true;
+            this.chkReadIgnoreErrors.Checked = true;
+            this.chkReadIgnoreErrors.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkReadIgnoreErrors.Location = new System.Drawing.Point(15, 22);
+            this.chkReadIgnoreErrors.Name = "chkReadIgnoreErrors";
+            this.chkReadIgnoreErrors.Size = new System.Drawing.Size(160, 21);
+            this.chkReadIgnoreErrors.TabIndex = 0;
+            this.chkReadIgnoreErrors.Text = "Ignore reading errors";
+            this.chkReadIgnoreErrors.UseVisualStyleBackColor = true;
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.chkWritePreserveTimes);
@@ -466,6 +528,18 @@
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Writing";
+            // 
+            // chkWritePreserveTimes
+            // 
+            this.chkWritePreserveTimes.AutoSize = true;
+            this.chkWritePreserveTimes.Checked = true;
+            this.chkWritePreserveTimes.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkWritePreserveTimes.Location = new System.Drawing.Point(302, 48);
+            this.chkWritePreserveTimes.Name = "chkWritePreserveTimes";
+            this.chkWritePreserveTimes.Size = new System.Drawing.Size(159, 21);
+            this.chkWritePreserveTimes.TabIndex = 15;
+            this.chkWritePreserveTimes.Text = "Preserve timestamps";
+            this.chkWritePreserveTimes.UseVisualStyleBackColor = true;
             // 
             // chkWriteCreateDirTree
             // 
@@ -511,54 +585,9 @@
             this.lblFilenameFormat.TabIndex = 11;
             this.lblFilenameFormat.Text = "Filename format";
             // 
-            // grpAdvFile
-            // 
-            this.grpAdvFile.Controls.Add(this.cbReadBufferSize);
-            this.grpAdvFile.Controls.Add(this.lblBufferSize);
-            this.grpAdvFile.Controls.Add(this.chkReadPreserveAccess);
-            this.grpAdvFile.Controls.Add(this.chkReadIgnoreErrors);
-            this.grpAdvFile.Location = new System.Drawing.Point(7, 3);
-            this.grpAdvFile.Name = "grpAdvFile";
-            this.grpAdvFile.Size = new System.Drawing.Size(477, 77);
-            this.grpAdvFile.TabIndex = 10;
-            this.grpAdvFile.TabStop = false;
-            this.grpAdvFile.Text = "Reading";
-            // 
-            // lblBufferSize
-            // 
-            this.lblBufferSize.AutoSize = true;
-            this.lblBufferSize.Location = new System.Drawing.Point(299, 23);
-            this.lblBufferSize.Name = "lblBufferSize";
-            this.lblBufferSize.Size = new System.Drawing.Size(97, 17);
-            this.lblBufferSize.TabIndex = 2;
-            this.lblBufferSize.Text = "Buffer size (KB)";
-            // 
-            // chkReadPreserveAccess
-            // 
-            this.chkReadPreserveAccess.AutoSize = true;
-            this.chkReadPreserveAccess.Enabled = false;
-            this.chkReadPreserveAccess.Location = new System.Drawing.Point(15, 49);
-            this.chkReadPreserveAccess.Name = "chkReadPreserveAccess";
-            this.chkReadPreserveAccess.Size = new System.Drawing.Size(226, 21);
-            this.chkReadPreserveAccess.TabIndex = 1;
-            this.chkReadPreserveAccess.Text = "Do not update file access time";
-            this.chkReadPreserveAccess.UseVisualStyleBackColor = true;
-            // 
-            // chkReadIgnoreErrors
-            // 
-            this.chkReadIgnoreErrors.AutoSize = true;
-            this.chkReadIgnoreErrors.Checked = true;
-            this.chkReadIgnoreErrors.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkReadIgnoreErrors.Location = new System.Drawing.Point(15, 22);
-            this.chkReadIgnoreErrors.Name = "chkReadIgnoreErrors";
-            this.chkReadIgnoreErrors.Size = new System.Drawing.Size(160, 21);
-            this.chkReadIgnoreErrors.TabIndex = 0;
-            this.chkReadIgnoreErrors.Text = "Ignore reading errors";
-            this.chkReadIgnoreErrors.UseVisualStyleBackColor = true;
-            // 
             // tabAbout
             // 
-            this.tabAbout.Controls.Add(this.linkLabel1);
+            this.tabAbout.Controls.Add(this.linkWiki);
             this.tabAbout.Controls.Add(this.lblAbout);
             this.tabAbout.Location = new System.Drawing.Point(4, 29);
             this.tabAbout.Name = "tabAbout";
@@ -568,22 +597,12 @@
             this.tabAbout.Text = "About";
             this.tabAbout.UseVisualStyleBackColor = true;
             // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(6, 175);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(178, 17);
-            this.linkLabel1.TabIndex = 1;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Visit Mente Binária website";
-            // 
             // lblAbout
             // 
             this.lblAbout.AutoSize = true;
             this.lblAbout.Location = new System.Drawing.Point(6, 13);
             this.lblAbout.Name = "lblAbout";
-            this.lblAbout.Size = new System.Drawing.Size(407, 136);
+            this.lblAbout.Size = new System.Drawing.Size(381, 170);
             this.lblAbout.TabIndex = 0;
             this.lblAbout.Text = resources.GetString("lblAbout.Text");
             // 
@@ -620,34 +639,17 @@
             this.ttWarn.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
             this.ttWarn.ToolTipTitle = "Attention";
             // 
-            // cbReadBufferSize
+            // linkWiki
             // 
-            this.cbReadBufferSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbReadBufferSize.DropDownWidth = 30;
-            this.cbReadBufferSize.FormattingEnabled = true;
-            this.cbReadBufferSize.Items.AddRange(new object[] {
-            "4",
-            "8",
-            "16",
-            "32",
-            "64"});
-            this.cbReadBufferSize.Location = new System.Drawing.Point(402, 20);
-            this.cbReadBufferSize.Name = "cbReadBufferSize";
-            this.cbReadBufferSize.Size = new System.Drawing.Size(57, 25);
-            this.cbReadBufferSize.TabIndex = 3;
-            this.ttWarn.SetToolTip(this.cbReadBufferSize, "Change it if you know exactly what you\'re doing.");
-            // 
-            // chkWritePreserveTimes
-            // 
-            this.chkWritePreserveTimes.AutoSize = true;
-            this.chkWritePreserveTimes.Checked = true;
-            this.chkWritePreserveTimes.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkWritePreserveTimes.Location = new System.Drawing.Point(302, 48);
-            this.chkWritePreserveTimes.Name = "chkWritePreserveTimes";
-            this.chkWritePreserveTimes.Size = new System.Drawing.Size(159, 21);
-            this.chkWritePreserveTimes.TabIndex = 15;
-            this.chkWritePreserveTimes.Text = "Preserve timestamps";
-            this.chkWritePreserveTimes.UseVisualStyleBackColor = true;
+            this.linkWiki.AutoSize = true;
+            this.linkWiki.BackColor = System.Drawing.Color.Transparent;
+            this.linkWiki.Location = new System.Drawing.Point(248, 166);
+            this.linkWiki.Name = "linkWiki";
+            this.linkWiki.Size = new System.Drawing.Size(72, 17);
+            this.linkWiki.TabIndex = 2;
+            this.linkWiki.TabStop = true;
+            this.linkWiki.Text = "wiki page";
+            this.linkWiki.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkWiki_LinkClicked);
             // 
             // frmMain
             // 
@@ -655,7 +657,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(508, 336);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabControl);
             this.Controls.Add(this.chkHideWindow);
             this.Controls.Add(this.btnStart);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -667,7 +669,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtFtpPort)).EndInit();
             this.groupFtp.ResumeLayout(false);
             this.groupFtp.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
+            this.tabControl.ResumeLayout(false);
             this.tabMonitor.ResumeLayout(false);
             this.groupFilesystem.ResumeLayout(false);
             this.groupFilesystem.PerformLayout();
@@ -675,10 +677,10 @@
             this.groupCopy.ResumeLayout(false);
             this.groupCopy.PerformLayout();
             this.tabAdvanced.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.grpAdvFile.ResumeLayout(false);
             this.grpAdvFile.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.tabAbout.ResumeLayout(false);
             this.tabAbout.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -704,7 +706,7 @@
         private System.Windows.Forms.Label lblFtpHost;
         private System.Windows.Forms.Button btnFtpTest;
         private System.Windows.Forms.CheckBox chkFtpAnonymous;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabMonitor;
         private System.Windows.Forms.TabPage tabCapture;
         private System.Windows.Forms.TabPage tabAbout;
@@ -737,10 +739,10 @@
         private System.Windows.Forms.Label lblFilenameFormat;
         private System.Windows.Forms.Label lblBufferSize;
         private System.Windows.Forms.CheckBox chkReadPreserveAccess;
-        private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.ToolTip ttWarn;
         private System.Windows.Forms.ComboBox cbReadBufferSize;
         private System.Windows.Forms.CheckBox chkWritePreserveTimes;
+        private System.Windows.Forms.LinkLabel linkWiki;
     }
 }
 

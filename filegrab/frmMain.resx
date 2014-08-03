@@ -130,11 +130,13 @@
     <value>FileGrab 0.4
 
 We're currently in ALPHA stage. USE AT YOUR OWN RISK.
-Please, support FileGrab! Send your feedback!
+Please, support FileGrab! Send your feedback to:
+
+Fernando Mercês &lt;nandu88 *noSPAM* gmail . com&gt;
 
 C# coder? You're very welcome to join the development!
 
-Written by Fernando Mercês (fernando@mentebinaria.com.br)</value>
+Looking for documentation? See our</value>
   </data>
   <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>120, 17</value>

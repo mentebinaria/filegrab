@@ -35,7 +35,7 @@ namespace filegrab
                     if (d.DriveType == DriveType.Fixed)
                     {
                         watch = new FileSystemWatcher();
-                        watch.InternalBufferSize = (int) cbReadBufferSize.SelectedItem;
+                        watch.InternalBufferSize = 1024 * Convert.ToInt32(cbReadBufferSize.SelectedItem);
                         watch.Path = d.RootDirectory.ToString();
                         watch.IncludeSubdirectories = true;
                         watch.NotifyFilter = NotifyFilters.FileName;
@@ -50,9 +50,9 @@ namespace filegrab
             }
 
             watch = new FileSystemWatcher();
-            watch.InternalBufferSize = Convert.ToInt32(cbReadBufferSize.SelectedItem);
+            watch.InternalBufferSize = 1024 * Convert.ToInt32(cbReadBufferSize.SelectedItem);
             watch.Path = txtPath.Text;
-            watch.IncludeSubdirectories = rbAll.Checked | chkRecursive.Enabled;
+            watch.IncludeSubdirectories = chkRecursive.Checked;
             watch.NotifyFilter = NotifyFilters.FileName;
             watch.Created += new FileSystemEventHandler(OnCreation);
             if (chkRule.Checked && txtRule.Text != "" && !chkRuleRegex.Checked)
@@ -171,11 +171,11 @@ namespace filegrab
                 }
                 catch (Exception ex)
                 {
+                    //FIXME: This is a writing error
                     if (!chkReadIgnoreErrors.Checked)
                         MessageBox.Show(ex.ToString());
                 }
             }
-
             return;
         }
 
@@ -317,17 +317,21 @@ namespace filegrab
             chkRuleNot.Enabled = chkRuleRegex.Checked;
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(
-                "You can set the format using the following variables:\n\n" +
-                "%{name}\t- the file name without extension\n" +
-                "%{ext}\t- the file extension\n" +
-                "%{md5}\t- the file MD5 hash\n" +
-                "%{sha1}\t- the file SHA1 hash\n" +
-                "%{sha256}\t- the file SHA-256 hash\n"
-            );
-        }
+        //private void button2_Click(object sender, EventArgs e)
+        //{
+        //    MessageBox.Show(
+        //        "You can set the format using the following variables:\n\n" +
+        //        "%{name}\t- the file name without extension\n" +
+        //        "%{ext}\t- the file extension\n" +
+        //        "%{md5}\t- the file MD5 hash\n" +
+        //        "%{sha1}\t- the file SHA1 hash\n" +
+        //        "%{sha256}\t- the file SHA-256 hash\n"
+        //    );
+        //}
 
+        private void linkWiki_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://sourceforge.net/p/filegrab/wiki/Home/");
+        }
     }
 }
