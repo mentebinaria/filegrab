@@ -1,9 +1,6 @@
 FileGrab
-=======
+===
 
-FileGrab monitors a Windows filesystem and upload to a FTP server each
-file created. It is designed to run on honeypots machines, malaware analystis'
-virtual machines and so on in order to capture files created by attackers or
-threats.
+FileGrab is a tool that monitors a Windows filesystem for newly created files and copy those files to another location. It can be useful for honeypots, malware analysis, investigation scenarios and so on.
 
-FileGrab is in alpha stage. Help to make it better by using it and reporting bugs!
+For more information see our [wiki](https://sourceforge.net/p/filegrab/wiki/)
