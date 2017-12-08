@@ -1,3 +1,4 @@
 filegrab/obj
 filegrab/bin
 *.suo
+.vs
