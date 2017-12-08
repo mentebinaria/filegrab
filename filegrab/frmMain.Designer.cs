@@ -1,4 +1,4 @@
-﻿namespace filegrab
+﻿namespace FileGrab
 {
     partial class frmMain
     {
@@ -74,13 +74,13 @@
             this.txtWriteFilenameFormat = new System.Windows.Forms.TextBox();
             this.lblFilenameFormat = new System.Windows.Forms.Label();
             this.tabAbout = new System.Windows.Forms.TabPage();
+            this.linkWiki = new System.Windows.Forms.LinkLabel();
             this.lblAbout = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusFileFound = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
             this.ttWarn = new System.Windows.Forms.ToolTip(this.components);
-            this.linkWiki = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.txtFtpPort)).BeginInit();
             this.groupFtp.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -97,7 +97,7 @@
             // 
             // btnStart
             // 
-            this.btnStart.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStart.Location = new System.Drawing.Point(399, 263);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(96, 44);
@@ -109,17 +109,17 @@
             // chkHideWindow
             // 
             this.chkHideWindow.AutoSize = true;
-            this.chkHideWindow.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkHideWindow.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkHideWindow.Location = new System.Drawing.Point(16, 280);
             this.chkHideWindow.Name = "chkHideWindow";
-            this.chkHideWindow.Size = new System.Drawing.Size(113, 21);
+            this.chkHideWindow.Size = new System.Drawing.Size(105, 21);
             this.chkHideWindow.TabIndex = 10;
             this.chkHideWindow.Text = "Hide window";
             this.chkHideWindow.UseVisualStyleBackColor = true;
             // 
             // txtFtpHost
             // 
-            this.txtFtpHost.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtFtpHost.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtFtpHost.Location = new System.Drawing.Point(89, 28);
             this.txtFtpHost.Name = "txtFtpHost";
             this.txtFtpHost.Size = new System.Drawing.Size(261, 23);
@@ -127,7 +127,7 @@
             // 
             // txtFtpPort
             // 
-            this.txtFtpPort.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtFtpPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtFtpPort.Location = new System.Drawing.Point(400, 28);
             this.txtFtpPort.Maximum = new decimal(new int[] {
             65535,
@@ -155,7 +155,7 @@
             this.groupFtp.Controls.Add(this.lblFtpHost);
             this.groupFtp.Controls.Add(this.txtFtpPort);
             this.groupFtp.Controls.Add(this.txtFtpHost);
-            this.groupFtp.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupFtp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupFtp.Location = new System.Drawing.Point(6, 69);
             this.groupFtp.Name = "groupFtp";
             this.groupFtp.Size = new System.Drawing.Size(477, 141);
@@ -166,10 +166,10 @@
             // chkFtpAnonymous
             // 
             this.chkFtpAnonymous.AutoSize = true;
-            this.chkFtpAnonymous.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkFtpAnonymous.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkFtpAnonymous.Location = new System.Drawing.Point(248, 67);
             this.chkFtpAnonymous.Name = "chkFtpAnonymous";
-            this.chkFtpAnonymous.Size = new System.Drawing.Size(102, 21);
+            this.chkFtpAnonymous.Size = new System.Drawing.Size(101, 21);
             this.chkFtpAnonymous.TabIndex = 7;
             this.chkFtpAnonymous.Text = "Anonymous";
             this.chkFtpAnonymous.UseVisualStyleBackColor = true;
@@ -187,7 +187,7 @@
             // 
             // txtFtpPassword
             // 
-            this.txtFtpPassword.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtFtpPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtFtpPassword.Location = new System.Drawing.Point(89, 103);
             this.txtFtpPassword.Name = "txtFtpPassword";
             this.txtFtpPassword.PasswordChar = '*';
@@ -197,7 +197,7 @@
             // lblFtpPassword
             // 
             this.lblFtpPassword.AutoSize = true;
-            this.lblFtpPassword.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFtpPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFtpPassword.Location = new System.Drawing.Point(10, 106);
             this.lblFtpPassword.Name = "lblFtpPassword";
             this.lblFtpPassword.Size = new System.Drawing.Size(69, 17);
@@ -206,7 +206,7 @@
             // 
             // txtFtpUser
             // 
-            this.txtFtpUser.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtFtpUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtFtpUser.Location = new System.Drawing.Point(89, 65);
             this.txtFtpUser.Name = "txtFtpUser";
             this.txtFtpUser.Size = new System.Drawing.Size(148, 23);
@@ -215,10 +215,10 @@
             // lblFtpUser
             // 
             this.lblFtpUser.AutoSize = true;
-            this.lblFtpUser.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFtpUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFtpUser.Location = new System.Drawing.Point(10, 68);
             this.lblFtpUser.Name = "lblFtpUser";
-            this.lblFtpUser.Size = new System.Drawing.Size(33, 17);
+            this.lblFtpUser.Size = new System.Drawing.Size(38, 17);
             this.lblFtpUser.TabIndex = 9;
             this.lblFtpUser.Text = "User";
             // 
@@ -234,10 +234,10 @@
             // lblFtpHost
             // 
             this.lblFtpHost.AutoSize = true;
-            this.lblFtpHost.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFtpHost.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFtpHost.Location = new System.Drawing.Point(10, 31);
             this.lblFtpHost.Name = "lblFtpHost";
-            this.lblFtpHost.Size = new System.Drawing.Size(36, 17);
+            this.lblFtpHost.Size = new System.Drawing.Size(37, 17);
             this.lblFtpHost.TabIndex = 7;
             this.lblFtpHost.Text = "Host";
             // 
@@ -248,7 +248,7 @@
             this.tabControl.Controls.Add(this.tabCapture);
             this.tabControl.Controls.Add(this.tabAdvanced);
             this.tabControl.Controls.Add(this.tabAbout);
-            this.tabControl.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.tabControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
             this.tabControl.Location = new System.Drawing.Point(8, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
@@ -277,7 +277,7 @@
             this.groupFilesystem.Controls.Add(this.rbAll);
             this.groupFilesystem.Controls.Add(this.btnPath);
             this.groupFilesystem.Controls.Add(this.rbSpecific);
-            this.groupFilesystem.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupFilesystem.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupFilesystem.Location = new System.Drawing.Point(6, 6);
             this.groupFilesystem.Name = "groupFilesystem";
             this.groupFilesystem.Size = new System.Drawing.Size(477, 204);
@@ -288,10 +288,10 @@
             // chkRule
             // 
             this.chkRule.AutoSize = true;
-            this.chkRule.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkRule.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkRule.Location = new System.Drawing.Point(14, 131);
             this.chkRule.Name = "chkRule";
-            this.chkRule.Size = new System.Drawing.Size(179, 21);
+            this.chkRule.Size = new System.Drawing.Size(173, 21);
             this.chkRule.TabIndex = 17;
             this.chkRule.Text = "Filename matching rule";
             this.chkRule.UseVisualStyleBackColor = true;
@@ -303,7 +303,7 @@
             this.chkRuleRegex.Enabled = false;
             this.chkRuleRegex.Location = new System.Drawing.Point(261, 158);
             this.chkRuleRegex.Name = "chkRuleRegex";
-            this.chkRuleRegex.Size = new System.Drawing.Size(144, 21);
+            this.chkRuleRegex.Size = new System.Drawing.Size(150, 21);
             this.chkRuleRegex.TabIndex = 16;
             this.chkRuleRegex.Text = "Regular Expression";
             this.chkRuleRegex.UseVisualStyleBackColor = true;
@@ -315,7 +315,7 @@
             this.chkRuleNot.Enabled = false;
             this.chkRuleNot.Location = new System.Drawing.Point(410, 160);
             this.chkRuleNot.Name = "chkRuleNot";
-            this.chkRuleNot.Size = new System.Drawing.Size(51, 21);
+            this.chkRuleNot.Size = new System.Drawing.Size(49, 21);
             this.chkRuleNot.TabIndex = 15;
             this.chkRuleNot.Text = "Not";
             this.chkRuleNot.UseVisualStyleBackColor = true;
@@ -335,10 +335,10 @@
             this.chkRecursive.Checked = true;
             this.chkRecursive.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkRecursive.Enabled = false;
-            this.chkRecursive.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkRecursive.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkRecursive.Location = new System.Drawing.Point(13, 104);
             this.chkRecursive.Name = "chkRecursive";
-            this.chkRecursive.Size = new System.Drawing.Size(166, 21);
+            this.chkRecursive.Size = new System.Drawing.Size(165, 21);
             this.chkRecursive.TabIndex = 13;
             this.chkRecursive.Text = "Include subdirectories";
             this.chkRecursive.UseVisualStyleBackColor = true;
@@ -346,7 +346,7 @@
             // txtPath
             // 
             this.txtPath.Enabled = false;
-            this.txtPath.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPath.Location = new System.Drawing.Point(13, 75);
             this.txtPath.Name = "txtPath";
             this.txtPath.ReadOnly = true;
@@ -357,10 +357,10 @@
             // 
             this.rbAll.AutoSize = true;
             this.rbAll.Checked = true;
-            this.rbAll.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rbAll.Location = new System.Drawing.Point(13, 21);
             this.rbAll.Name = "rbAll";
-            this.rbAll.Size = new System.Drawing.Size(113, 21);
+            this.rbAll.Size = new System.Drawing.Size(114, 21);
             this.rbAll.TabIndex = 0;
             this.rbAll.TabStop = true;
             this.rbAll.Text = "Whole system";
@@ -380,10 +380,10 @@
             // rbSpecific
             // 
             this.rbSpecific.AutoSize = true;
-            this.rbSpecific.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbSpecific.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rbSpecific.Location = new System.Drawing.Point(13, 48);
             this.rbSpecific.Name = "rbSpecific";
-            this.rbSpecific.Size = new System.Drawing.Size(110, 21);
+            this.rbSpecific.Size = new System.Drawing.Size(107, 21);
             this.rbSpecific.TabIndex = 1;
             this.rbSpecific.Text = "Specific path";
             this.rbSpecific.UseVisualStyleBackColor = true;
@@ -415,7 +415,7 @@
             // 
             // txtCopyTo
             // 
-            this.txtCopyTo.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCopyTo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCopyTo.Location = new System.Drawing.Point(89, 22);
             this.txtCopyTo.Name = "txtCopyTo";
             this.txtCopyTo.ReadOnly = true;
@@ -435,10 +435,10 @@
             // lblLocation
             // 
             this.lblLocation.AutoSize = true;
-            this.lblLocation.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblLocation.Location = new System.Drawing.Point(10, 25);
             this.lblLocation.Name = "lblLocation";
-            this.lblLocation.Size = new System.Drawing.Size(65, 17);
+            this.lblLocation.Size = new System.Drawing.Size(62, 17);
             this.lblLocation.TabIndex = 12;
             this.lblLocation.Text = "Location";
             // 
@@ -488,7 +488,7 @@
             this.lblBufferSize.AutoSize = true;
             this.lblBufferSize.Location = new System.Drawing.Point(299, 23);
             this.lblBufferSize.Name = "lblBufferSize";
-            this.lblBufferSize.Size = new System.Drawing.Size(97, 17);
+            this.lblBufferSize.Size = new System.Drawing.Size(107, 17);
             this.lblBufferSize.TabIndex = 2;
             this.lblBufferSize.Text = "Buffer size (KB)";
             // 
@@ -498,7 +498,7 @@
             this.chkReadPreserveAccess.Enabled = false;
             this.chkReadPreserveAccess.Location = new System.Drawing.Point(15, 49);
             this.chkReadPreserveAccess.Name = "chkReadPreserveAccess";
-            this.chkReadPreserveAccess.Size = new System.Drawing.Size(226, 21);
+            this.chkReadPreserveAccess.Size = new System.Drawing.Size(217, 21);
             this.chkReadPreserveAccess.TabIndex = 1;
             this.chkReadPreserveAccess.Text = "Do not update file access time";
             this.chkReadPreserveAccess.UseVisualStyleBackColor = true;
@@ -510,7 +510,7 @@
             this.chkReadIgnoreErrors.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkReadIgnoreErrors.Location = new System.Drawing.Point(15, 22);
             this.chkReadIgnoreErrors.Name = "chkReadIgnoreErrors";
-            this.chkReadIgnoreErrors.Size = new System.Drawing.Size(160, 21);
+            this.chkReadIgnoreErrors.Size = new System.Drawing.Size(161, 21);
             this.chkReadIgnoreErrors.TabIndex = 0;
             this.chkReadIgnoreErrors.Text = "Ignore reading errors";
             this.chkReadIgnoreErrors.UseVisualStyleBackColor = true;
@@ -544,10 +544,12 @@
             // chkWriteCreateDirTree
             // 
             this.chkWriteCreateDirTree.AutoSize = true;
+            this.chkWriteCreateDirTree.Checked = true;
+            this.chkWriteCreateDirTree.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkWriteCreateDirTree.Enabled = false;
             this.chkWriteCreateDirTree.Location = new System.Drawing.Point(14, 71);
             this.chkWriteCreateDirTree.Name = "chkWriteCreateDirTree";
-            this.chkWriteCreateDirTree.Size = new System.Drawing.Size(161, 21);
+            this.chkWriteCreateDirTree.Size = new System.Drawing.Size(157, 21);
             this.chkWriteCreateDirTree.TabIndex = 14;
             this.chkWriteCreateDirTree.Text = "Create directory tree";
             this.chkWriteCreateDirTree.UseVisualStyleBackColor = true;
@@ -559,7 +561,7 @@
             this.chkWriteOverwrite.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkWriteOverwrite.Location = new System.Drawing.Point(15, 48);
             this.chkWriteOverwrite.Name = "chkWriteOverwrite";
-            this.chkWriteOverwrite.Size = new System.Drawing.Size(230, 21);
+            this.chkWriteOverwrite.Size = new System.Drawing.Size(221, 21);
             this.chkWriteOverwrite.TabIndex = 0;
             this.chkWriteOverwrite.Text = "Overwrite files with same name";
             this.chkWriteOverwrite.UseVisualStyleBackColor = true;
@@ -581,7 +583,7 @@
             this.lblFilenameFormat.Enabled = false;
             this.lblFilenameFormat.Location = new System.Drawing.Point(12, 22);
             this.lblFilenameFormat.Name = "lblFilenameFormat";
-            this.lblFilenameFormat.Size = new System.Drawing.Size(114, 17);
+            this.lblFilenameFormat.Size = new System.Drawing.Size(109, 17);
             this.lblFilenameFormat.TabIndex = 11;
             this.lblFilenameFormat.Text = "Filename format";
             // 
@@ -597,36 +599,49 @@
             this.tabAbout.Text = "About";
             this.tabAbout.UseVisualStyleBackColor = true;
             // 
+            // linkWiki
+            // 
+            this.linkWiki.AutoSize = true;
+            this.linkWiki.BackColor = System.Drawing.Color.Transparent;
+            this.linkWiki.Location = new System.Drawing.Point(248, 166);
+            this.linkWiki.Name = "linkWiki";
+            this.linkWiki.Size = new System.Drawing.Size(66, 17);
+            this.linkWiki.TabIndex = 2;
+            this.linkWiki.TabStop = true;
+            this.linkWiki.Text = "wiki page";
+            this.linkWiki.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkWiki_LinkClicked);
+            // 
             // lblAbout
             // 
             this.lblAbout.AutoSize = true;
             this.lblAbout.Location = new System.Drawing.Point(6, 13);
             this.lblAbout.Name = "lblAbout";
-            this.lblAbout.Size = new System.Drawing.Size(381, 170);
+            this.lblAbout.Size = new System.Drawing.Size(386, 170);
             this.lblAbout.TabIndex = 0;
             this.lblAbout.Text = resources.GetString("lblAbout.Text");
             // 
             // statusStrip1
             // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(17, 17);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusFileFound,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 314);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 312);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(508, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(508, 24);
             this.statusStrip1.TabIndex = 13;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // statusFileFound
             // 
             this.statusFileFound.Name = "statusFileFound";
-            this.statusFileFound.Size = new System.Drawing.Size(90, 17);
+            this.statusFileFound.Size = new System.Drawing.Size(105, 19);
             this.statusFileFound.Text = "statusFileFound";
             // 
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 19);
             // 
             // ttInfo
             // 
@@ -638,18 +653,6 @@
             // 
             this.ttWarn.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
             this.ttWarn.ToolTipTitle = "Attention";
-            // 
-            // linkWiki
-            // 
-            this.linkWiki.AutoSize = true;
-            this.linkWiki.BackColor = System.Drawing.Color.Transparent;
-            this.linkWiki.Location = new System.Drawing.Point(248, 166);
-            this.linkWiki.Name = "linkWiki";
-            this.linkWiki.Size = new System.Drawing.Size(72, 17);
-            this.linkWiki.TabIndex = 2;
-            this.linkWiki.TabStop = true;
-            this.linkWiki.Text = "wiki page";
-            this.linkWiki.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkWiki_LinkClicked);
             // 
             // frmMain
             // 

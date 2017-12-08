@@ -4,18 +4,19 @@ using System.IO;
 using System.Net;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using FileGrab.Common;
 
-namespace filegrab
+namespace FileGrab
 {
     public partial class frmMain : Form
     {
-        FileSystemWatcher watcher = new FileSystemWatcher();
-        List<FileSystemWatcher> watches = new List<FileSystemWatcher>();
-        FtpWebRequest ftp;
+        private Monitor monitor;
 
         public frmMain()
         {
             InitializeComponent();
+
+            this.monitor = new Monitor();
         }
 
         private void rbSpecific_CheckedChanged(object sender, EventArgs e)
@@ -25,44 +26,49 @@ namespace filegrab
 
         public void watchStart()
         {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-            FileSystemWatcher watch;
+            /* Enable Filter And Regular Expression */
+            if (chkRule.Checked)
+                this.monitor.Matching(txtRule.Text, chkRuleRegex.Checked);
 
+            /* Enable FTP Service */
+            if (this.monitor.Ftp != null)
+                setFtpCredentials();
+
+            /* Cleanup */
+            this.monitor.Reset();
+
+            /* !!!!!!!!!!! Include Ignore Directories (Avoid Recursion) !!!!!!!!!!! */
+            // this.monitor.IgnoreDirectory(@"<Put Your Local FTP Folder Here To Avoid Recursion>");
+
+            /* Enable Shadow Copy */
+            if (!string.IsNullOrEmpty(txtCopyTo.Text))
+                this.monitor.Capture(
+                    txtCopyTo.Text,
+                    chkWriteOverwrite.Checked,
+                    chkReadIgnoreErrors.Checked,
+                    chkWritePreserveTimes.Checked,
+                    chkWriteCreateDirTree.Checked);
+
+            /* Enable Some Events */
+            this.monitor.OnCreated += Monitor_OnCreated;
+
+            /* Enable Watcher(s) */
             if (rbAll.Checked)
-            {
-                foreach (DriveInfo d in allDrives)
-                {
-                    if (d.DriveType == DriveType.Fixed)
-                    {
-                        watch = new FileSystemWatcher();
-                        watch.InternalBufferSize = 1024 * Convert.ToInt32(cbReadBufferSize.SelectedItem);
-                        watch.Path = d.RootDirectory.ToString();
-                        watch.IncludeSubdirectories = true;
-                        watch.NotifyFilter = NotifyFilters.FileName;
-                        watch.Created += new FileSystemEventHandler(OnCreation);
-                        watch.EnableRaisingEvents = true;
-                        if (chkRule.Checked && txtRule.Text != "" && !chkRuleRegex.Checked)
-                            watch.Filter = txtRule.Text;
-                        watches.Add(watch);
-                    }
-                }
-                return;
-            }
+                this.monitor.Watcher(int.Parse(cbReadBufferSize.SelectedItem.ToString()), chkRecursive.Checked);
+            else if (rbSpecific.Checked)
+                this.monitor.Watcher(txtPath.Text, int.Parse(cbReadBufferSize.SelectedItem.ToString()), chkRecursive.Checked);
 
-            watch = new FileSystemWatcher();
-            watch.InternalBufferSize = 1024 * Convert.ToInt32(cbReadBufferSize.SelectedItem);
-            watch.Path = txtPath.Text;
-            watch.IncludeSubdirectories = chkRecursive.Checked;
-            watch.NotifyFilter = NotifyFilters.FileName;
-            watch.Created += new FileSystemEventHandler(OnCreation);
-            if (chkRule.Checked && txtRule.Text != "" && !chkRuleRegex.Checked)
-                watch.Filter = txtRule.Text;
-            watch.EnableRaisingEvents = true;
+            this.monitor.Start();
+        }
+
+        private void Monitor_OnCreated(string filename)
+        {
+            Invoke((MethodInvoker)delegate { statusFileFound.Text = filename; });
         }
 
         public void watchStop()
         {
-            watcher.EnableRaisingEvents = false;
+            this.monitor.Stop();
         }
 
         private void changeControls(bool state)
@@ -100,85 +106,7 @@ namespace filegrab
                 statusFileFound.Text = "";
             }
         }
-
-        public void OnCreation(object source, FileSystemEventArgs e)
-        {
-            // we cannot monitor the copy destination directory
-            if (txtCopyTo.Text != "" &&
-                e.FullPath.StartsWith(txtCopyTo.Text, StringComparison.CurrentCultureIgnoreCase))
-                return;
-
-            if (chkRule.Checked && txtRule.Text != "")
-            {
-                if (chkRuleRegex.Checked)
-                {
-                    Regex regex = new Regex(txtRule.Text, RegexOptions.IgnoreCase);
-
-                    if (!(chkRuleNot.Checked ^ regex.IsMatch(Path.GetFileName(e.FullPath))))
-                        return;
-                }
-            }
-
-            statusFileFound.Text = e.FullPath;
-
-            if (txtCopyTo.Text != "")
-            {
-                try
-                {
-                    if (!File.Exists(e.FullPath))
-                        return;
-                    String filename = e.Name.Substring(1 + e.Name.LastIndexOf('\\'));
-                    String dstFile = Path.Combine(txtCopyTo.Text, filename);
-                    File.Copy(e.FullPath, dstFile, chkWriteOverwrite.Checked);
-                    File.SetAttributes(dstFile, FileAttributes.Normal); // remove read-only, hidden, etc
-
-                    if (chkWritePreserveTimes.Checked)
-                    {
-                        File.SetCreationTime(dstFile, File.GetCreationTime(e.FullPath));
-                        File.SetLastAccessTime(dstFile, File.GetLastAccessTime(e.FullPath));
-                        File.SetLastWriteTime(dstFile, File.GetLastWriteTime(e.FullPath));
-                    }
-
-                }
-                catch (IOException ex)
-                {
-                    if (!chkReadIgnoreErrors.Checked)
-                        MessageBox.Show(ex.Message);
-                }
-            }
-
-            if (txtFtpHost.Text == "")
-                return;
-
-            ftp = (FtpWebRequest)WebRequest.Create("ftp://" + txtFtpHost.Text + ":" + txtFtpPort.Value + "/" + e.Name);
-            ftp.Method = WebRequestMethods.Ftp.UploadFile;
-            setFtpCredentials();
-            ftp.UseBinary = true;
-            ftp.UsePassive = true;
-
-            using (FileStream fs = File.OpenRead(e.FullPath))
-            {
-                byte[] buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, buffer.Length);
-                fs.Close();
-                try
-                {
-                    Stream requestStream = ftp.GetRequestStream();
-                    requestStream.Write(buffer, 0, buffer.Length);
-                    requestStream.Close();
-                    requestStream.Flush();
-                    statusFileFound.Text = e.FullPath;
-                }
-                catch (Exception ex)
-                {
-                    //FIXME: This is a writing error
-                    if (!chkReadIgnoreErrors.Checked)
-                        MessageBox.Show(ex.ToString());
-                }
-            }
-            return;
-        }
-
+        
         private void btnPath_Click(object sender, EventArgs e)
         {
             folderDlg.ShowDialog();
@@ -220,10 +148,13 @@ namespace filegrab
 
         private void setFtpCredentials()
         {
+            if (!validateFtpFields())
+                return;
+
             if (chkFtpAnonymous.Checked)
-                ftp.Credentials = new NetworkCredential("anonymous", "anonymous@anonymous.net");
+                this.monitor.FtpService(txtFtpHost.Text, (int)txtFtpPort.Value);
             else
-                ftp.Credentials = new NetworkCredential(txtFtpUser.Text, txtFtpPassword.Text);
+                this.monitor.FtpService(txtFtpHost.Text, txtFtpUser.Text, txtFtpPassword.Text, (int)txtFtpPort.Value);
         }
 
         private void btnFtpTest_Click(object sender, EventArgs e)
@@ -231,21 +162,15 @@ namespace filegrab
             if (!validateFtpFields())
                 return;
 
-            ftp = (FtpWebRequest)WebRequest.Create("ftp://" + txtFtpHost.Text + ":" + txtFtpPort.Value);
-            ftp.Method = WebRequestMethods.Ftp.ListDirectory;
+            if (chkFtpAnonymous.Checked)
+                this.monitor.FtpService(txtFtpHost.Text, (int)txtFtpPort.Value);
+            else
+                this.monitor.FtpService(txtFtpHost.Text, txtFtpUser.Text, txtFtpPassword.Text, (int)txtFtpPort.Value);
 
-            setFtpCredentials();
-
-            try
-            {
-                ftp.GetResponse();
+            if (this.monitor.Ftp.Test())
                 MessageBox.Show("Connection succeeded!", "FTP test", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (WebException ex)
-            {
-                MessageBox.Show("Connection failed!\n\nDetails:\n" + ex.ToString(),
-                    "FTP test", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            else
+                MessageBox.Show("Connection failed!\n\nDetails:\n", "FTP test", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void btnCopyToBrowse_Click(object sender, EventArgs e)
@@ -300,10 +225,12 @@ namespace filegrab
                         invalid = true;
                 }
             }
-            
+
             if (txtRule.Text == "")
                 invalid = true;
-            
+
+            this.monitor.Matching(txtRule.Text, chkRuleRegex.Checked);
+
             txtRule.BackColor = invalid ? System.Drawing.Color.LightPink : System.Drawing.Color.White;
             btnStart.Enabled = !invalid;
         }

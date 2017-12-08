@@ -8,7 +8,7 @@
     <ProjectGuid>{1BF0DDF1-F7C7-4B0E-ABAB-8B30D96EA6EB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>filegrab</RootNamespace>
+    <RootNamespace>FileGrab</RootNamespace>
     <AssemblyName>FileGrab</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
@@ -144,6 +144,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\filegrab.common\filegrab.common.csproj">
+      <Project>{911dd2d9-4a28-4389-92ae-3ef94b3e17a4}</Project>
+      <Name>filegrab.common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

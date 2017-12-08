@@ -1,0 +1,5 @@
+C:\Users\Developer\Documents\Visual Studio 2017\Projects\filegrab\filegrab.common\bin\Debug\FileGrab.Common.dll
+C:\Users\Developer\Documents\Visual Studio 2017\Projects\filegrab\filegrab.common\bin\Debug\FileGrab.Common.pdb
+C:\Users\Developer\Documents\Visual Studio 2017\Projects\filegrab\filegrab.common\obj\Debug\filegrab.common.csproj.CoreCompileInputs.cache
+C:\Users\Developer\Documents\Visual Studio 2017\Projects\filegrab\filegrab.common\obj\Debug\FileGrab.Common.dll
+C:\Users\Developer\Documents\Visual Studio 2017\Projects\filegrab\filegrab.common\obj\Debug\FileGrab.Common.pdb
