@@ -1,3 +1,6 @@
-filegrab/obj
-filegrab/bin
+*/bin
+*/obj
 *.suo
+*.exe
+*.dll
+*.pdb
