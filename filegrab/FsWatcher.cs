@@ -66,9 +66,9 @@ namespace FileGrab
             }
         }
 
-        public void SetWatchFilter(string filter)
+        public void SetWatchFilter(string? filter)
         {
-            if (filter == string.Empty)
+            if (string.IsNullOrEmpty(filter))
             {
                 return;
             }
