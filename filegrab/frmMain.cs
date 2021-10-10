@@ -9,60 +9,20 @@ namespace filegrab
 {
     public partial class frmMain : Form
     {
-        FileSystemWatcher watcher = new FileSystemWatcher();
-        List<FileSystemWatcher> watches = new List<FileSystemWatcher>();
         FtpWebRequest ftp;
+
+        private readonly FsWatcher fsWatcher = new();
 
         public frmMain()
         {
             InitializeComponent();
+            fsWatcher.SetWatchBuffer(Convert.ToInt32(cbReadBufferSize.SelectedItem));
+            fsWatcher.SetWatchFilter(txtRule.Text);
         }
 
         private void rbSpecific_CheckedChanged(object sender, EventArgs e)
         {
             txtPath.Enabled = btnPath.Enabled = chkRecursive.Enabled = rbSpecific.Checked;
-        }
-
-        public void watchStart()
-        {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-            FileSystemWatcher watch;
-
-            if (rbAll.Checked)
-            {
-                foreach (DriveInfo d in allDrives)
-                {
-                    if (d.DriveType == DriveType.Fixed)
-                    {
-                        watch = new FileSystemWatcher();
-                        watch.InternalBufferSize = 1024 * Convert.ToInt32(cbReadBufferSize.SelectedItem);
-                        watch.Path = d.RootDirectory.ToString();
-                        watch.IncludeSubdirectories = true;
-                        watch.NotifyFilter = NotifyFilters.FileName;
-                        watch.Created += new FileSystemEventHandler(OnCreation);
-                        watch.EnableRaisingEvents = true;
-                        if (chkRule.Checked && txtRule.Text != "" && !chkRuleRegex.Checked)
-                            watch.Filter = txtRule.Text;
-                        watches.Add(watch);
-                    }
-                }
-                return;
-            }
-
-            watch = new FileSystemWatcher();
-            watch.InternalBufferSize = 1024 * Convert.ToInt32(cbReadBufferSize.SelectedItem);
-            watch.Path = txtPath.Text;
-            watch.IncludeSubdirectories = chkRecursive.Checked;
-            watch.NotifyFilter = NotifyFilters.FileName;
-            watch.Created += new FileSystemEventHandler(OnCreation);
-            if (chkRule.Checked && txtRule.Text != "" && !chkRuleRegex.Checked)
-                watch.Filter = txtRule.Text;
-            watch.EnableRaisingEvents = true;
-        }
-
-        public void watchStop()
-        {
-            watcher.EnableRaisingEvents = false;
         }
 
         private void changeControls(bool state)
@@ -89,14 +49,23 @@ namespace filegrab
                 btnStart.Text = "Stop";
                 this.Text += " (running)";
                 changeControls(false);
-                watchStart();
+                if (rbAll.Checked)
+                {
+                    fsWatcher.WatchStart();
+                    fsWatcher.AddWatchEvent(OnCreation);
+                }
+                else
+                {
+                    fsWatcher.WatchStart(FsWatcherOpts.WatchDir | FsWatcherOpts.WatchSub, txtPath.Text);
+                    fsWatcher.AddWatchEvent(OnCreation);
+                }
             }
             else
             {
                 btnStart.Text = "Start";
                 this.Text = "FileGrab";
                 changeControls(true);
-                watchStop();
+                fsWatcher.WatchStop();
                 statusFileFound.Text = "";
             }
         }
@@ -112,7 +81,7 @@ namespace filegrab
             {
                 if (chkRuleRegex.Checked)
                 {
-                    Regex regex = new Regex(txtRule.Text, RegexOptions.IgnoreCase);
+                    Regex regex = new(txtRule.Text, RegexOptions.IgnoreCase);
 
                     if (!(chkRuleNot.Checked ^ regex.IsMatch(Path.GetFileName(e.FullPath))))
                         return;
@@ -300,10 +269,10 @@ namespace filegrab
                         invalid = true;
                 }
             }
-            
+
             if (txtRule.Text == "")
                 invalid = true;
-            
+
             txtRule.BackColor = invalid ? System.Drawing.Color.LightPink : System.Drawing.Color.White;
             btnStart.Enabled = !invalid;
         }
@@ -331,7 +300,12 @@ namespace filegrab
 
         private void linkWiki_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://sourceforge.net/p/filegrab/wiki/Home/");
+            System.Diagnostics.Process.Start("https://sourceforge.net/p/FileGrab/wiki/Home/");
+        }
+
+        private void ttInfo_Popup(object sender, PopupEventArgs e)
+        {
+
         }
     }
 }
