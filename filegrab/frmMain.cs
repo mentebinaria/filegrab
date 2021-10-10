@@ -49,16 +49,11 @@ namespace FileGrab
                 btnStart.Text = "Stop";
                 this.Text += " (running)";
                 changeControls(false);
-                if (rbAll.Checked)
-                {
-                    fsWatcher.WatchStart();
-                    fsWatcher.AddWatchEvent(OnCreation);
-                }
-                else
-                {
-                    fsWatcher.WatchStart(FsWatcherOpts.WatchDir | FsWatcherOpts.WatchSub, txtPath.Text);
-                    fsWatcher.AddWatchEvent(OnCreation);
-                }
+
+				fsWatcher.WatchStart((rbAll.Checked) ? FsWatcherOpts.WatchAll : FsWatcherOpts.WatchDir, txtPath.Text);
+                fsWatcher.SetWatchRecursion(chkRecursive.Checked);
+                fsWatcher.AddWatchEvent(OnCreation);
+ 
             }
             else
             {
@@ -307,5 +302,10 @@ namespace FileGrab
         {
 
         }
-    }
+
+		private void chkRecursive_CheckedChanged(object sender, EventArgs e)
+		{
+            
+		}
+	}
 }

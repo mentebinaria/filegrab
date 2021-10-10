@@ -39,8 +39,7 @@ namespace FileGrab
                         FileSystemWatcher watch = new();
 
                         watch.Path = d.RootDirectory.ToString();
-                        SetWatchRecursion((watcherOpts & FsWatcherOpts.WatchSub) == FsWatcherOpts.WatchSub); ;
-                        watch.NotifyFilter = NotifyFilters.FileName;
+						watch.NotifyFilter = NotifyFilters.FileName;
                         watch.EnableRaisingEvents = true;
                         fileSystemWatchers.Add(watch);
                     }
@@ -51,8 +50,7 @@ namespace FileGrab
                 FileSystemWatcher watch = new();
 
                 watch.Path = string.IsNullOrEmpty(path) ? throw new Exception("Invalid PATH") : path;
-                SetWatchRecursion((watcherOpts & FsWatcherOpts.WatchSub) == FsWatcherOpts.WatchSub);
-                watch.NotifyFilter = NotifyFilters.FileName;
+				watch.NotifyFilter = NotifyFilters.FileName;
                 watch.EnableRaisingEvents = true;
                 fileSystemWatchers.Add(watch);
             }
@@ -79,27 +77,28 @@ namespace FileGrab
             }
         }
 
-        private void SetWatchRecursion(bool opt)
-        {
-            foreach (var wather in fileSystemWatchers)
-            {
-                wather.IncludeSubdirectories = opt;
-            }
-        }
+		public void SetWatchRecursion(bool opt)
+		{
+			foreach (var watcher in fileSystemWatchers)
+			{
+                watcher.IncludeSubdirectories = opt;
+			}
+		}
 
-        public void AddWatchEvent(eventDel evnt)
+		public void AddWatchEvent(eventDel evnt)
         {
-            foreach (var wather in fileSystemWatchers)
+            foreach (var watcher in fileSystemWatchers)
             {
-                wather.Created += new FileSystemEventHandler(evnt);
+                watcher.Created += new FileSystemEventHandler(evnt);
             }
         }
 
         public void WatchStop()
         {
-            foreach (var watcher in fileSystemWatchers)
+            for (int i=0; i < fileSystemWatchers.Count; i++)
             {
-                watcher.EnableRaisingEvents = false;
+                fileSystemWatchers[i].EnableRaisingEvents = false;
+                fileSystemWatchers.Remove(fileSystemWatchers[i]);
             }
         }
     }
