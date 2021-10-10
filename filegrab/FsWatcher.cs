@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 #nullable enable
 
-namespace filegrab
+namespace FileGrab
 {
     public delegate void eventDel(object source, FileSystemEventArgs e);
 

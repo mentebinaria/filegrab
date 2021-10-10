@@ -5,7 +5,7 @@ using System.Net;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace filegrab
+namespace FileGrab
 {
     public partial class frmMain : Form
     {
