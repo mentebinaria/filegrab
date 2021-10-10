@@ -9,9 +9,10 @@ namespace FileGrab
 {
     public partial class frmMain : Form
     {
-        FtpWebRequest ftp;
-
+        private FtpWebRequest ftp;
         private readonly FsWatcher fsWatcher = new();
+        
+        public bool IsRunning {get; private set;} = false;
 
         public frmMain()
         {
@@ -40,32 +41,37 @@ namespace FileGrab
 
             if (chkHideWindow.Checked)
             {
-                frmMain.ActiveForm.ShowInTaskbar = false;
-                frmMain.ActiveForm.Visible = false;
+                ActiveForm.ShowInTaskbar = false;
+                ActiveForm.Visible = false;
             }
 
-            if (btnStart.Text.Equals("Start"))
+            if (IsRunning)
             {
                 btnStart.Text = "Stop";
-                this.Text += " (running)";
+                this.Text = "FileGrab (running)";
                 changeControls(false);
 
 				fsWatcher.WatchStart((rbAll.Checked) ? FsWatcherOpts.WatchAll : FsWatcherOpts.WatchDir, txtPath.Text);
                 fsWatcher.SetWatchRecursion(chkRecursive.Checked);
                 fsWatcher.AddWatchEvent(OnCreation);
- 
+                
+                IsRunning = false;
             }
             else
             {
                 btnStart.Text = "Start";
                 this.Text = "FileGrab";
                 changeControls(true);
+
                 fsWatcher.WatchStop();
-                statusFileFound.Text = "";
+                
+                statusFileFound.Text = string.Empty;
+                
+                IsRunning = true;
             }
         }
 
-        public void OnCreation(object source, FileSystemEventArgs e)
+        public void OnCreation(object source, FileSystemEventArgs e) 
         {
             // we cannot monitor the copy destination directory
             if (txtCopyTo.Text != "" &&
@@ -91,8 +97,8 @@ namespace FileGrab
                 {
                     if (!File.Exists(e.FullPath))
                         return;
-                    String filename = e.Name.Substring(1 + e.Name.LastIndexOf('\\'));
-                    String dstFile = Path.Combine(txtCopyTo.Text, filename);
+                    string filename = e.Name.Substring(1 + e.Name.LastIndexOf('\\'));
+					string dstFile = Path.Combine(txtCopyTo.Text, filename);
                     File.Copy(e.FullPath, dstFile, chkWriteOverwrite.Checked);
                     File.SetAttributes(dstFile, FileAttributes.Normal); // remove read-only, hidden, etc
 
