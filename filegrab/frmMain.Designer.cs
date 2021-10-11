@@ -352,7 +352,7 @@
 			this.chkRecursive.TabIndex = 13;
 			this.chkRecursive.Text = "Include subdirectories";
 			this.chkRecursive.UseVisualStyleBackColor = true;
-			this.chkRecursive.CheckedChanged += new System.EventHandler(this.chkRecursive_CheckedChanged);
+			//this.chkRecursive.CheckedChanged += new System.EventHandler(this.chkRecursive_CheckedChanged);
 			// 
 			// txtPath
 			// 
@@ -673,6 +673,7 @@
 			this.statusFileFound.Name = "statusFileFound";
 			this.statusFileFound.Size = new System.Drawing.Size(90, 17);
 			this.statusFileFound.Text = "statusFileFound";
+			//this.statusFileFound.Click += new System.EventHandler(this.statusFileFound_Click);
 			// 
 			// toolStripStatusLabel2
 			// 

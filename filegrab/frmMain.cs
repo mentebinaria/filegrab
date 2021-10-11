@@ -232,15 +232,5 @@ namespace FileGrab
         {
             System.Diagnostics.Process.Start("https://sourceforge.net/p/FileGrab/wiki/Home/");
         }
-
-        private void ttInfo_Popup(object sender, PopupEventArgs e)
-        {
-
-        }
-
-		private void chkRecursive_CheckedChanged(object sender, EventArgs e)
-		{
-            
-		}
 	}
 }
