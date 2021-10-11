@@ -37,7 +37,6 @@
 			this.txtFtpPort = new System.Windows.Forms.NumericUpDown();
 			this.groupFtp = new System.Windows.Forms.GroupBox();
 			this.chkFtpAnonymous = new System.Windows.Forms.CheckBox();
-			this.btnFtpTest = new System.Windows.Forms.Button();
 			this.txtFtpPassword = new System.Windows.Forms.TextBox();
 			this.lblFtpPassword = new System.Windows.Forms.Label();
 			this.txtFtpUser = new System.Windows.Forms.TextBox();
@@ -150,7 +149,6 @@
 			// groupFtp
 			// 
 			this.groupFtp.Controls.Add(this.chkFtpAnonymous);
-			this.groupFtp.Controls.Add(this.btnFtpTest);
 			this.groupFtp.Controls.Add(this.txtFtpPassword);
 			this.groupFtp.Controls.Add(this.lblFtpPassword);
 			this.groupFtp.Controls.Add(this.txtFtpUser);
@@ -167,7 +165,7 @@
 			this.groupFtp.Size = new System.Drawing.Size(556, 163);
 			this.groupFtp.TabIndex = 8;
 			this.groupFtp.TabStop = false;
-			this.groupFtp.Text = "FTP upload";
+			this.groupFtp.Text = "FTP Upload";
 			// 
 			// chkFtpAnonymous
 			// 
@@ -181,17 +179,6 @@
 			this.chkFtpAnonymous.Text = "Anonymous";
 			this.chkFtpAnonymous.UseVisualStyleBackColor = true;
 			this.chkFtpAnonymous.CheckedChanged += new System.EventHandler(this.chkFtpAnonymous_CheckedChanged);
-			// 
-			// btnFtpTest
-			// 
-			this.btnFtpTest.Location = new System.Drawing.Point(289, 119);
-			this.btnFtpTest.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.btnFtpTest.Name = "btnFtpTest";
-			this.btnFtpTest.Size = new System.Drawing.Size(119, 27);
-			this.btnFtpTest.TabIndex = 9;
-			this.btnFtpTest.Text = "Test";
-			this.btnFtpTest.UseVisualStyleBackColor = true;
-			this.btnFtpTest.Click += new System.EventHandler(this.btnFtpTest_Click);
 			// 
 			// txtFtpPassword
 			// 
@@ -757,7 +744,6 @@
         private System.Windows.Forms.Label lblFtpUser;
         private System.Windows.Forms.Label lblFtpPort;
         private System.Windows.Forms.Label lblFtpHost;
-        private System.Windows.Forms.Button btnFtpTest;
         private System.Windows.Forms.CheckBox chkFtpAnonymous;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabMonitor;
