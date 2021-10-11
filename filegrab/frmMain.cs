@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.IO;
-using System.Net;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -9,10 +8,11 @@ namespace FileGrab
 {
     public partial class frmMain : Form
     {
-        private FtpWebRequest ftp;
         private readonly FsWatcher fsWatcher = new();
-        
-        public bool IsRunning {get; private set;} = false;
+        private FtpUpload ftpUpload;
+
+        public readonly string ProgramName = "FileGrab";
+        public bool IsRunning {get; private set;} = true;
 
         public frmMain()
         {
@@ -48,7 +48,7 @@ namespace FileGrab
             if (IsRunning)
             {
                 btnStart.Text = "Stop";
-                this.Text = "FileGrab (running)";
+                this.Text = $"{ ProgramName } (running)";
                 changeControls(false);
 
 				fsWatcher.WatchStart((rbAll.Checked) ? FsWatcherOpts.WatchAll : FsWatcherOpts.WatchDir, txtPath.Text);
@@ -60,7 +60,7 @@ namespace FileGrab
             else
             {
                 btnStart.Text = "Start";
-                this.Text = "FileGrab";
+                this.Text = ProgramName;
                 changeControls(true);
 
                 fsWatcher.WatchStop();
@@ -117,36 +117,22 @@ namespace FileGrab
                 }
             }
 
+            // I'll improve this later
             if (txtFtpHost.Text == "")
                 return;
 
-            ftp = (FtpWebRequest)WebRequest.Create("ftp://" + txtFtpHost.Text + ":" + txtFtpPort.Value + "/" + e.Name);
-            ftp.Method = WebRequestMethods.Ftp.UploadFile;
-            setFtpCredentials();
-            ftp.UseBinary = true;
-            ftp.UsePassive = true;
-
-            using (FileStream fs = File.OpenRead(e.FullPath))
+            try
             {
-                byte[] buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, buffer.Length);
-                fs.Close();
-                try
-                {
-                    Stream requestStream = ftp.GetRequestStream();
-                    requestStream.Write(buffer, 0, buffer.Length);
-                    requestStream.Close();
-                    requestStream.Flush();
-                    statusFileFound.Text = e.FullPath;
-                }
-                catch (Exception ex)
-                {
-                    //FIXME: This is a writing error
-                    if (!chkReadIgnoreErrors.Checked)
-                        MessageBox.Show(ex.ToString());
-                }
+                ftpUpload = FtpUpload.Create(txtFtpHost.Text, (int)txtFtpPort.Value, e.Name);
+                ftpUpload.UseCredentials(txtFtpUser.Text, txtFtpPassword.Text, chkFtpAnonymous.Checked);
+                ftpUpload.Upload(e.FullPath);
             }
-            return;
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Connection failed!\n\nDetails:\n { ex.Message }",
+                                "FTP Upload", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void btnPath_Click(object sender, EventArgs e)
@@ -161,64 +147,7 @@ namespace FileGrab
             txtFtpUser.Enabled = txtFtpPassword.Enabled = !chkFtpAnonymous.Checked;
         }
 
-        private bool validateFtpFields()
-        {
-            if (txtFtpHost.Text.Length < 1)
-            {
-                MessageBox.Show("FTP host missing", "FileGrab", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                txtFtpHost.Focus();
-                return false;
-            }
-
-            if (chkFtpAnonymous.Checked)
-                return true;
-
-            if (txtFtpUser.Text.Length < 1)
-            {
-                MessageBox.Show("FTP user missing", "FileGrab", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                txtFtpUser.Focus();
-                return false;
-            }
-            else if (txtFtpPassword.Text.Length < 1)
-            {
-                MessageBox.Show("FTP password missing", "FileGrab", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                txtFtpPassword.Focus();
-                return false;
-            }
-            return true;
-        }
-
-        private void setFtpCredentials()
-        {
-            if (chkFtpAnonymous.Checked)
-                ftp.Credentials = new NetworkCredential("anonymous", "anonymous@anonymous.net");
-            else
-                ftp.Credentials = new NetworkCredential(txtFtpUser.Text, txtFtpPassword.Text);
-        }
-
-        private void btnFtpTest_Click(object sender, EventArgs e)
-        {
-            if (!validateFtpFields())
-                return;
-
-            ftp = (FtpWebRequest)WebRequest.Create("ftp://" + txtFtpHost.Text + ":" + txtFtpPort.Value);
-            ftp.Method = WebRequestMethods.Ftp.ListDirectory;
-
-            setFtpCredentials();
-
-            try
-            {
-                ftp.GetResponse();
-                MessageBox.Show("Connection succeeded!", "FTP test", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (WebException ex)
-            {
-                MessageBox.Show("Connection failed!\n\nDetails:\n" + ex.ToString(),
-                    "FTP test", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnCopyToBrowse_Click(object sender, EventArgs e)
+		private void btnCopyToBrowse_Click(object sender, EventArgs e)
         {
             folderDlg.ShowDialog();
             if (folderDlg.SelectedPath != "")
