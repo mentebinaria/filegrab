@@ -1,68 +1,29 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.IO;
-using System.Net;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace filegrab
+namespace FileGrab
 {
     public partial class frmMain : Form
     {
-        FileSystemWatcher watcher = new FileSystemWatcher();
-        List<FileSystemWatcher> watches = new List<FileSystemWatcher>();
-        FtpWebRequest ftp;
+        private readonly FsWatcher fsWatcher = new();
+        private FtpUpload ftpUpload;
+
+        public readonly string ProgramName = "FileGrab";
+        public bool IsRunning {get; private set;} = true;
 
         public frmMain()
         {
             InitializeComponent();
+            fsWatcher.SetWatchBuffer(Convert.ToInt32(cbReadBufferSize.SelectedItem));
+            fsWatcher.SetWatchFilter(txtRule.Text);
         }
 
         private void rbSpecific_CheckedChanged(object sender, EventArgs e)
         {
             txtPath.Enabled = btnPath.Enabled = chkRecursive.Enabled = rbSpecific.Checked;
-        }
-
-        public void watchStart()
-        {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-            FileSystemWatcher watch;
-
-            if (rbAll.Checked)
-            {
-                foreach (DriveInfo d in allDrives)
-                {
-                    if (d.DriveType == DriveType.Fixed)
-                    {
-                        watch = new FileSystemWatcher();
-                        watch.InternalBufferSize = 1024 * Convert.ToInt32(cbReadBufferSize.SelectedItem);
-                        watch.Path = d.RootDirectory.ToString();
-                        watch.IncludeSubdirectories = true;
-                        watch.NotifyFilter = NotifyFilters.FileName;
-                        watch.Created += new FileSystemEventHandler(OnCreation);
-                        watch.EnableRaisingEvents = true;
-                        if (chkRule.Checked && txtRule.Text != "" && !chkRuleRegex.Checked)
-                            watch.Filter = txtRule.Text;
-                        watches.Add(watch);
-                    }
-                }
-                return;
-            }
-
-            watch = new FileSystemWatcher();
-            watch.InternalBufferSize = 1024 * Convert.ToInt32(cbReadBufferSize.SelectedItem);
-            watch.Path = txtPath.Text;
-            watch.IncludeSubdirectories = chkRecursive.Checked;
-            watch.NotifyFilter = NotifyFilters.FileName;
-            watch.Created += new FileSystemEventHandler(OnCreation);
-            if (chkRule.Checked && txtRule.Text != "" && !chkRuleRegex.Checked)
-                watch.Filter = txtRule.Text;
-            watch.EnableRaisingEvents = true;
-        }
-
-        public void watchStop()
-        {
-            watcher.EnableRaisingEvents = false;
         }
 
         private void changeControls(bool state)
@@ -80,28 +41,37 @@ namespace filegrab
 
             if (chkHideWindow.Checked)
             {
-                frmMain.ActiveForm.ShowInTaskbar = false;
-                frmMain.ActiveForm.Visible = false;
+                ActiveForm.ShowInTaskbar = false;
+                ActiveForm.Visible = false;
             }
 
-            if (btnStart.Text.Equals("Start"))
+            if (IsRunning)
             {
                 btnStart.Text = "Stop";
-                this.Text += " (running)";
+                this.Text = $"{ ProgramName } (running)";
                 changeControls(false);
-                watchStart();
+
+				fsWatcher.WatchStart((rbAll.Checked) ? FsWatcherOpts.WatchAll : FsWatcherOpts.WatchDir, txtPath.Text);
+                fsWatcher.SetWatchRecursion(chkRecursive.Checked);
+                fsWatcher.AddWatchEvent(OnCreation);
+                
+                IsRunning = false;
             }
             else
             {
                 btnStart.Text = "Start";
-                this.Text = "FileGrab";
+                this.Text = ProgramName;
                 changeControls(true);
-                watchStop();
-                statusFileFound.Text = "";
+
+                fsWatcher.WatchStop();
+                
+                statusFileFound.Text = string.Empty;
+                
+                IsRunning = true;
             }
         }
 
-        public void OnCreation(object source, FileSystemEventArgs e)
+        public void OnCreation(object source, FileSystemEventArgs e) 
         {
             // we cannot monitor the copy destination directory
             if (txtCopyTo.Text != "" &&
@@ -112,7 +82,7 @@ namespace filegrab
             {
                 if (chkRuleRegex.Checked)
                 {
-                    Regex regex = new Regex(txtRule.Text, RegexOptions.IgnoreCase);
+                    Regex regex = new(txtRule.Text, RegexOptions.IgnoreCase);
 
                     if (!(chkRuleNot.Checked ^ regex.IsMatch(Path.GetFileName(e.FullPath))))
                         return;
@@ -127,8 +97,8 @@ namespace filegrab
                 {
                     if (!File.Exists(e.FullPath))
                         return;
-                    String filename = e.Name.Substring(1 + e.Name.LastIndexOf('\\'));
-                    String dstFile = Path.Combine(txtCopyTo.Text, filename);
+                    string filename = e.Name.Substring(1 + e.Name.LastIndexOf('\\'));
+					string dstFile = Path.Combine(txtCopyTo.Text, filename);
                     File.Copy(e.FullPath, dstFile, chkWriteOverwrite.Checked);
                     File.SetAttributes(dstFile, FileAttributes.Normal); // remove read-only, hidden, etc
 
@@ -147,36 +117,22 @@ namespace filegrab
                 }
             }
 
+            // I'll improve this later
             if (txtFtpHost.Text == "")
                 return;
 
-            ftp = (FtpWebRequest)WebRequest.Create("ftp://" + txtFtpHost.Text + ":" + txtFtpPort.Value + "/" + e.Name);
-            ftp.Method = WebRequestMethods.Ftp.UploadFile;
-            setFtpCredentials();
-            ftp.UseBinary = true;
-            ftp.UsePassive = true;
-
-            using (FileStream fs = File.OpenRead(e.FullPath))
+            try
             {
-                byte[] buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, buffer.Length);
-                fs.Close();
-                try
-                {
-                    Stream requestStream = ftp.GetRequestStream();
-                    requestStream.Write(buffer, 0, buffer.Length);
-                    requestStream.Close();
-                    requestStream.Flush();
-                    statusFileFound.Text = e.FullPath;
-                }
-                catch (Exception ex)
-                {
-                    //FIXME: This is a writing error
-                    if (!chkReadIgnoreErrors.Checked)
-                        MessageBox.Show(ex.ToString());
-                }
+                ftpUpload = FtpUpload.Create(txtFtpHost.Text, (int)txtFtpPort.Value, e.Name);
+                ftpUpload.UseCredentials(txtFtpUser.Text, txtFtpPassword.Text, chkFtpAnonymous.Checked);
+                ftpUpload.Upload(e.FullPath);
             }
-            return;
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Connection failed!\n\nDetails:\n { ex.Message }",
+                                "FTP Upload", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void btnPath_Click(object sender, EventArgs e)
@@ -191,64 +147,7 @@ namespace filegrab
             txtFtpUser.Enabled = txtFtpPassword.Enabled = !chkFtpAnonymous.Checked;
         }
 
-        private bool validateFtpFields()
-        {
-            if (txtFtpHost.Text.Length < 1)
-            {
-                MessageBox.Show("FTP host missing", "FileGrab", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                txtFtpHost.Focus();
-                return false;
-            }
-
-            if (chkFtpAnonymous.Checked)
-                return true;
-
-            if (txtFtpUser.Text.Length < 1)
-            {
-                MessageBox.Show("FTP user missing", "FileGrab", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                txtFtpUser.Focus();
-                return false;
-            }
-            else if (txtFtpPassword.Text.Length < 1)
-            {
-                MessageBox.Show("FTP password missing", "FileGrab", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                txtFtpPassword.Focus();
-                return false;
-            }
-            return true;
-        }
-
-        private void setFtpCredentials()
-        {
-            if (chkFtpAnonymous.Checked)
-                ftp.Credentials = new NetworkCredential("anonymous", "anonymous@anonymous.net");
-            else
-                ftp.Credentials = new NetworkCredential(txtFtpUser.Text, txtFtpPassword.Text);
-        }
-
-        private void btnFtpTest_Click(object sender, EventArgs e)
-        {
-            if (!validateFtpFields())
-                return;
-
-            ftp = (FtpWebRequest)WebRequest.Create("ftp://" + txtFtpHost.Text + ":" + txtFtpPort.Value);
-            ftp.Method = WebRequestMethods.Ftp.ListDirectory;
-
-            setFtpCredentials();
-
-            try
-            {
-                ftp.GetResponse();
-                MessageBox.Show("Connection succeeded!", "FTP test", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (WebException ex)
-            {
-                MessageBox.Show("Connection failed!\n\nDetails:\n" + ex.ToString(),
-                    "FTP test", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnCopyToBrowse_Click(object sender, EventArgs e)
+		private void btnCopyToBrowse_Click(object sender, EventArgs e)
         {
             folderDlg.ShowDialog();
             if (folderDlg.SelectedPath != "")
@@ -300,10 +199,10 @@ namespace filegrab
                         invalid = true;
                 }
             }
-            
+
             if (txtRule.Text == "")
                 invalid = true;
-            
+
             txtRule.BackColor = invalid ? System.Drawing.Color.LightPink : System.Drawing.Color.White;
             btnStart.Enabled = !invalid;
         }
@@ -331,7 +230,7 @@ namespace filegrab
 
         private void linkWiki_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://sourceforge.net/p/filegrab/wiki/Home/");
+            System.Diagnostics.Process.Start("https://sourceforge.net/p/FileGrab/wiki/Home/");
         }
-    }
+	}
 }
