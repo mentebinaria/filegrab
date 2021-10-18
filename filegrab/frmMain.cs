@@ -53,7 +53,7 @@ namespace FileGrab
 				fsWatcher.WatchStart((rbAll.Checked) ? FsWatcherOpts.WatchAll : FsWatcherOpts.WatchDir, txtPath.Text);
                 fsWatcher.SetWatchRecursion(chkRecursive.Checked);
 
-                fsWatcher.AddHandler(oncreated: OnCreation);
+                fsWatcher.AddHandler(OnChanged, OnCreated, OnDeleted, OnRenamed, OnError);
                 
                 IsRunning = false;
             }
@@ -158,14 +158,14 @@ namespace FileGrab
         }
 
         // Handlers
-        public void OnCreation(object source, FileSystemEventArgs e)
+        public void OnCreated(object source, FileSystemEventArgs e)
         {
             // we cannot monitor the copy destination directory
             if (txtCopyTo.Text != "" &&
                 e.FullPath.StartsWith(txtCopyTo.Text, StringComparison.CurrentCultureIgnoreCase))
                 return;
 
-            statusFileFound.Text = e.FullPath;
+            statusFileFound.Text = $"Created: { e.FullPath }";
 
             if (txtCopyTo.Text != "")
             {
@@ -209,6 +209,30 @@ namespace FileGrab
                 MessageBox.Show($"Connection failed!\n\nDetails:\n { ex.Message }",
                                 "FTP Upload", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public void OnDeleted(object source, FileSystemEventArgs e)
+        {
+            statusFileFound.Text = $"Deleted: { e.FullPath }";
+        }
+
+        public void OnChanged(object source, FileSystemEventArgs e)
+        {
+            if (e.ChangeType != WatcherChangeTypes.Changed)
+            {
+                return;
+            }
+            statusFileFound.Text = $"Changed: { e.FullPath }";
+        }
+
+        public void OnRenamed(object source, RenamedEventArgs e)
+        {
+            statusFileFound.Text = $"Renamed: { e.OldFullPath } -> {e.FullPath}";
+        }
+
+        public void OnError(object source, ErrorEventArgs e)
+        {
+            MessageBox.Show($"Error :: { e.GetException() }");
         }
 	}
 }

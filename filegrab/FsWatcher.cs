@@ -55,7 +55,6 @@ namespace FileGrab
                                            | NotifyFilters.LastWrite
                                            | NotifyFilters.Security
                                            | NotifyFilters.Size;
-
                         watcher.EnableRaisingEvents = true;
                         fileSystemWatchers.Add(watcher);
                     }
@@ -66,7 +65,14 @@ namespace FileGrab
                 FileSystemWatcher watch = new();
 
                 watch.Path = string.IsNullOrEmpty(path) ? throw new Exception("Invalid PATH") : path;
-				watch.NotifyFilter = NotifyFilters.FileName;
+                watch.NotifyFilter = NotifyFilters.Attributes
+                                | NotifyFilters.CreationTime
+                                | NotifyFilters.DirectoryName
+                                | NotifyFilters.FileName
+                                | NotifyFilters.LastAccess
+                                | NotifyFilters.LastWrite
+                                | NotifyFilters.Security
+                                | NotifyFilters.Size;
                 watch.EnableRaisingEvents = true;
                 fileSystemWatchers.Add(watch);
             }
