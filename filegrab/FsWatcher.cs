@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 namespace FileGrab
 {
     public delegate void eventDel(object source, FileSystemEventArgs e);
+    public delegate void renameDel(object source, RenamedEventArgs e);
+    public delegate void errorDel(object source, ErrorEventArgs e);
 
     [Flags]
     public enum FsWatcherOpts
@@ -26,6 +28,12 @@ namespace FileGrab
     {
         private List<FileSystemWatcher> fileSystemWatchers = new();
 
+        public eventDel? OnCreated { get; set; }
+        public eventDel? OnChanged { get; set; }
+        public eventDel? OnDeleted { get; set; }
+        public eventDel? OnRenamed { get; set; }
+        public errorDel? OnError { get; set; }
+
         public void WatchStart(FsWatcherOpts watcherOpts = FsWatcherOpts.WatchAll, string? path = null)
         {
             if (watcherOpts == FsWatcherOpts.WatchAll)
@@ -36,12 +44,20 @@ namespace FileGrab
                 {
                     if (d.DriveType == DriveType.Fixed)
                     {
-                        FileSystemWatcher watch = new();
+                        FileSystemWatcher watcher = new();
 
-                        watch.Path = d.RootDirectory.ToString();
-						watch.NotifyFilter = NotifyFilters.FileName;
-                        watch.EnableRaisingEvents = true;
-                        fileSystemWatchers.Add(watch);
+                        watcher.Path = d.RootDirectory.ToString();
+                        watcher.NotifyFilter = NotifyFilters.Attributes
+                                           | NotifyFilters.CreationTime
+                                           | NotifyFilters.DirectoryName
+                                           | NotifyFilters.FileName
+                                           | NotifyFilters.LastAccess
+                                           | NotifyFilters.LastWrite
+                                           | NotifyFilters.Security
+                                           | NotifyFilters.Size;
+
+                        watcher.EnableRaisingEvents = true;
+                        fileSystemWatchers.Add(watcher);
                     }
                 }
             }
@@ -55,6 +71,7 @@ namespace FileGrab
                 fileSystemWatchers.Add(watch);
             }
         }
+
 
         public void SetWatchBuffer(int buffer)
         {
@@ -85,14 +102,6 @@ namespace FileGrab
 			}
 		}
 
-		public void AddWatchEvent(eventDel evnt)
-        {
-            foreach (var watcher in fileSystemWatchers)
-            {
-                watcher.Created += new FileSystemEventHandler(evnt);
-            }
-        }
-
         public void WatchStop()
         {
             for (int i=0; i < fileSystemWatchers.Count; i++)
@@ -101,5 +110,45 @@ namespace FileGrab
                 fileSystemWatchers.Remove(fileSystemWatchers[i]);
             }
         }
-    }
+
+        public void AddHandler(eventDel? onchanged = null, eventDel? oncreated = null,
+                               eventDel? ondeleted = null, renameDel? onrenamed = null, errorDel? onerror = null)
+        {
+            foreach (var watcher in fileSystemWatchers)
+            {
+                watcher.Changed += new FileSystemEventHandler(onchanged ?? onChanged);
+                watcher.Created += new FileSystemEventHandler(oncreated ?? onCreated);
+                watcher.Deleted += new FileSystemEventHandler(ondeleted ?? onDeleted);
+                watcher.Renamed += new RenamedEventHandler(onrenamed ?? onRenamed);
+                watcher.Error += new ErrorEventHandler(onerror ?? onError);
+            }
+        }
+
+
+        private static void onChanged(object sender, FileSystemEventArgs e)
+        {
+            // Empty Handler
+        }
+
+        private static void onCreated(object sender, FileSystemEventArgs e)
+        {
+            // Empty Handler
+        }
+
+        private static void onDeleted(object sender, FileSystemEventArgs e) 
+        {
+            // Empty Handler
+        }
+
+        private static void onRenamed(object sender, RenamedEventArgs e)
+        {
+            // Empty Handler
+        }
+
+        private static void onError(object sender, ErrorEventArgs e)
+        {
+            // Empty Handler
+        }
+
+    } 
 }
