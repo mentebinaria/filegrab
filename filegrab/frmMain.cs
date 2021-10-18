@@ -165,42 +165,32 @@ namespace FileGrab
                 e.FullPath.StartsWith(txtCopyTo.Text, StringComparison.CurrentCultureIgnoreCase))
                 return;
 
-            if (chkRule.Checked && txtRule.Text != "")
-            {
-                if (chkRuleRegex.Checked)
-                {
-                    Regex regex = new(txtRule.Text, RegexOptions.IgnoreCase);
-
-                    if (!(chkRuleNot.Checked ^ regex.IsMatch(Path.GetFileName(e.FullPath))))
-                        return;
-                }
-            }
-
             statusFileFound.Text = e.FullPath;
 
             if (txtCopyTo.Text != "")
             {
                 try
                 {
-                    if (!File.Exists(e.FullPath))
-                        return;
-                    string filename = e.Name.Substring(1 + e.Name.LastIndexOf('\\'));
-                    string dstFile = Path.Combine(txtCopyTo.Text, filename);
-                    File.Copy(e.FullPath, dstFile, chkWriteOverwrite.Checked);
+					string filename = e.Name[(1 + e.Name.LastIndexOf('\\'))..];
+					string dstFile = Path.Combine(txtCopyTo.Text, filename);
+                    
+                    Utils.CopyFileTo(e.FullPath, dstFile, expr: txtRule.Text);
+					
                     File.SetAttributes(dstFile, FileAttributes.Normal); // remove read-only, hidden, etc
 
-                    if (chkWritePreserveTimes.Checked)
+					if (chkWritePreserveTimes.Checked)
                     {
                         File.SetCreationTime(dstFile, File.GetCreationTime(e.FullPath));
                         File.SetLastAccessTime(dstFile, File.GetLastAccessTime(e.FullPath));
                         File.SetLastWriteTime(dstFile, File.GetLastWriteTime(e.FullPath));
                     }
-
                 }
                 catch (IOException ex)
                 {
                     if (!chkReadIgnoreErrors.Checked)
+                    {
                         MessageBox.Show(ex.Message);
+                    }
                 }
             }
 

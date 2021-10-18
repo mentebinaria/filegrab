@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FileGrab
 {
-	class Utils
+	public class Utils
 	{
         // https://stackoverflow.com/questions/6198392/check-whether-a-path-is-valid
         private static bool IsValidPath(string path, bool allowRelativePaths = false)
@@ -41,7 +41,7 @@ namespace FileGrab
 
         public static void CopyFileTo(string src, string dst, bool allowRelativePaths = true, string? expr = null)
 		{
-			if (IsValidPath(src, allowRelativePaths) && IsValidPath(dst, allowRelativePaths))
+			if (File.Exists(src) && (IsValidPath(src, allowRelativePaths) && IsValidPath(dst, allowRelativePaths)))
 			{
                 if (!string.IsNullOrEmpty(expr))
                 {
