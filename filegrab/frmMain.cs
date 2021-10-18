@@ -164,7 +164,7 @@ namespace FileGrab
                 e.FullPath.StartsWith(txtCopyTo.Text, StringComparison.CurrentCultureIgnoreCase))
                 return;
 
-            statusFileFound.Text = $"{ e.FullPath }";
+            statusFileFound.Text = $"{ e.FullPath } { DateTime.Now }";
 
             if (txtCopyTo.Text != "")
             {
@@ -212,7 +212,7 @@ namespace FileGrab
 
         public void OnDeleted(object source, FileSystemEventArgs e)
         {
-            statusFileFound.Text = $"Deleted: { e.FullPath }";
+            statusFileFound.Text = $"Deleted: { e.FullPath } { DateTime.Now }";
         }
 
         public void OnError(object source, ErrorEventArgs e)
