@@ -53,7 +53,7 @@ namespace FileGrab
 				fsWatcher.WatchStart((rbAll.Checked) ? FsWatcherOpts.WatchAll : FsWatcherOpts.WatchDir, txtPath.Text);
                 fsWatcher.SetWatchRecursion(chkRecursive.Checked);
 
-                fsWatcher.AddHandler(OnChanged, OnCreated, OnDeleted, OnRenamed, OnError);
+                fsWatcher.AddHandler(OnChanged, OnChanged, OnDeleted, null, OnError);
                 
                 IsRunning = false;
             }
@@ -157,28 +157,27 @@ namespace FileGrab
             System.Diagnostics.Process.Start("https://sourceforge.net/p/FileGrab/wiki/Home/");
         }
 
-        // Handlers
-        public void OnCreated(object source, FileSystemEventArgs e)
+        public void OnChanged(object source, FileSystemEventArgs e)
         {
             // we cannot monitor the copy destination directory
             if (txtCopyTo.Text != "" &&
                 e.FullPath.StartsWith(txtCopyTo.Text, StringComparison.CurrentCultureIgnoreCase))
                 return;
 
-            statusFileFound.Text = $"Created: { e.FullPath }";
+            statusFileFound.Text = $"{ e.FullPath }";
 
             if (txtCopyTo.Text != "")
             {
                 try
                 {
-					string filename = e.Name[(1 + e.Name.LastIndexOf('\\'))..];
-					string dstFile = Path.Combine(txtCopyTo.Text, filename);
-                    
+                    string filename = e.Name[(1 + e.Name.LastIndexOf('\\'))..];
+                    string dstFile = Path.Combine(txtCopyTo.Text, filename);
+
                     Utils.CopyFileTo(e.FullPath, dstFile, expr: txtRule.Text);
-					
+
                     File.SetAttributes(dstFile, FileAttributes.Normal); // remove read-only, hidden, etc
 
-					if (chkWritePreserveTimes.Checked)
+                    if (chkWritePreserveTimes.Checked)
                     {
                         File.SetCreationTime(dstFile, File.GetCreationTime(e.FullPath));
                         File.SetLastAccessTime(dstFile, File.GetLastAccessTime(e.FullPath));
@@ -216,23 +215,9 @@ namespace FileGrab
             statusFileFound.Text = $"Deleted: { e.FullPath }";
         }
 
-        public void OnChanged(object source, FileSystemEventArgs e)
-        {
-            if (e.ChangeType != WatcherChangeTypes.Changed)
-            {
-                return;
-            }
-            statusFileFound.Text = $"Changed: { e.FullPath }";
-        }
-
-        public void OnRenamed(object source, RenamedEventArgs e)
-        {
-            statusFileFound.Text = $"Renamed: { e.OldFullPath } -> {e.FullPath}";
-        }
-
         public void OnError(object source, ErrorEventArgs e)
         {
-            MessageBox.Show($"Error :: { e.GetException() }");
+            MessageBox.Show($"{ e.GetException() }");
         }
 	}
 }
