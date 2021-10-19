@@ -17,6 +17,8 @@ namespace FileGrab
         public frmMain()
         {
             InitializeComponent();
+            Logging.Setup(@"Logs\NLog.config");
+            MessageBox.Show(Logging.LogFilePath);
         }
 
         private void rbSpecific_CheckedChanged(object sender, EventArgs e)
@@ -78,9 +80,11 @@ namespace FileGrab
                 txtPath.Text = folderDlg.SelectedPath;
         }
 
-        private void chkFtpAnonymous_CheckedChanged(object sender, EventArgs e)
-        {
-            txtFtpUser.Enabled = txtFtpPassword.Enabled = !chkFtpAnonymous.Checked;
+		private void button2_Click(object sender, EventArgs e)
+		{
+            folderDlg.ShowDialog();
+            if (folderDlg.SelectedPath != "")
+                textBox2.Text = folderDlg.SelectedPath;
         }
 
 		private void btnCopyToBrowse_Click(object sender, EventArgs e)
@@ -89,6 +93,12 @@ namespace FileGrab
             if (folderDlg.SelectedPath != "")
                 txtCopyTo.Text = folderDlg.SelectedPath;
         }
+
+        private void chkFtpAnonymous_CheckedChanged(object sender, EventArgs e)
+        {
+            txtFtpUser.Enabled = txtFtpPassword.Enabled = !chkFtpAnonymous.Checked;
+        }
+
 
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -155,14 +165,15 @@ namespace FileGrab
             System.Diagnostics.Process.Start("https://sourceforge.net/p/FileGrab/wiki/Home/");
         }
 
-        public void OnChanged(object source, FileSystemEventArgs e)
+        public void OnCreation(object source, FileSystemEventArgs e)
         {
             // we cannot monitor the copy destination directory
             if (txtCopyTo.Text != "" &&
                 e.FullPath.StartsWith(txtCopyTo.Text, StringComparison.CurrentCultureIgnoreCase))
                 return;
 
-            statusFileFound.Text = $"{ e.FullPath } { DateTime.Now }";
+            Logging.Log($"Created: { e.FullPath }");
+            statusFileFound.Text = $"{ e.FullPath }";
 
             if (txtCopyTo.Text != "")
             {
@@ -210,12 +221,23 @@ namespace FileGrab
 
         public void OnDeleted(object source, FileSystemEventArgs e)
         {
+            Logging.Log($"Deleted: { e.FullPath }");
             statusFileFound.Text = $"Deleted: { e.FullPath } { DateTime.Now }";
         }
 
+        public void OnChanged(object source, FileSystemEventArgs e)
+		{
+            if (e.ChangeType == WatcherChangeTypes.Changed)
+            {
+                Logging.Log($"Changed: { e.FullPath }");
+                statusFileFound.Text = $"Changed: { e.FullPath }";
+            }
+		}
+
         public void OnError(object source, ErrorEventArgs e)
         {
-            MessageBox.Show($"{ e.GetException() }");
+            MessageBox.Show($"Error :: { e.GetException() }");
         }
+
 	}
 }
