@@ -101,7 +101,6 @@ namespace FileGrab
         private void chkRule_CheckedChanged(object sender, EventArgs e)
         {
             txtRule.Enabled = chkRuleRegex.Enabled = chkRule.Checked;
-            chkRuleNot.Enabled = chkRuleRegex.Checked & chkRule.Checked;
             if (!chkRule.Checked)
             {
                 btnStart.Enabled = true;
@@ -149,7 +148,6 @@ namespace FileGrab
                 txtRule_TextChanged(sender, e);
             else
                 txtRule.BackColor = System.Drawing.Color.White;
-            chkRuleNot.Enabled = chkRuleRegex.Checked;
         }
 
         private void linkWiki_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

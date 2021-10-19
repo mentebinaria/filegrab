@@ -48,7 +48,6 @@
 			this.groupFilesystem = new System.Windows.Forms.GroupBox();
 			this.chkRule = new System.Windows.Forms.CheckBox();
 			this.chkRuleRegex = new System.Windows.Forms.CheckBox();
-			this.chkRuleNot = new System.Windows.Forms.CheckBox();
 			this.txtRule = new System.Windows.Forms.TextBox();
 			this.chkRecursive = new System.Windows.Forms.CheckBox();
 			this.txtPath = new System.Windows.Forms.TextBox();
@@ -273,7 +272,6 @@
 			// 
 			this.groupFilesystem.Controls.Add(this.chkRule);
 			this.groupFilesystem.Controls.Add(this.chkRuleRegex);
-			this.groupFilesystem.Controls.Add(this.chkRuleNot);
 			this.groupFilesystem.Controls.Add(this.txtRule);
 			this.groupFilesystem.Controls.Add(this.chkRecursive);
 			this.groupFilesystem.Controls.Add(this.txtPath);
@@ -316,18 +314,6 @@
 			this.chkRuleRegex.UseVisualStyleBackColor = true;
 			this.chkRuleRegex.CheckedChanged += new System.EventHandler(this.chkRuleRegex_CheckedChanged);
 			// 
-			// chkRuleNot
-			// 
-			this.chkRuleNot.AutoSize = true;
-			this.chkRuleNot.Enabled = false;
-			this.chkRuleNot.Location = new System.Drawing.Point(478, 185);
-			this.chkRuleNot.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.chkRuleNot.Name = "chkRuleNot";
-			this.chkRuleNot.Size = new System.Drawing.Size(51, 21);
-			this.chkRuleNot.TabIndex = 15;
-			this.chkRuleNot.Text = "Not";
-			this.chkRuleNot.UseVisualStyleBackColor = true;
-			// 
 			// txtRule
 			// 
 			this.txtRule.Enabled = false;
@@ -352,7 +338,6 @@
 			this.chkRecursive.TabIndex = 13;
 			this.chkRecursive.Text = "Include subdirectories";
 			this.chkRecursive.UseVisualStyleBackColor = true;
-			//this.chkRecursive.CheckedChanged += new System.EventHandler(this.chkRecursive_CheckedChanged);
 			// 
 			// txtPath
 			// 
@@ -673,7 +658,6 @@
 			this.statusFileFound.Name = "statusFileFound";
 			this.statusFileFound.Size = new System.Drawing.Size(90, 17);
 			this.statusFileFound.Text = "statusFileFound";
-			//this.statusFileFound.Click += new System.EventHandler(this.statusFileFound_Click);
 			// 
 			// toolStripStatusLabel2
 			// 
@@ -767,7 +751,6 @@
         private System.Windows.Forms.TabPage tabAdvanced;
         private System.Windows.Forms.CheckBox chkRule;
         private System.Windows.Forms.CheckBox chkRuleRegex;
-        private System.Windows.Forms.CheckBox chkRuleNot;
         private System.Windows.Forms.TextBox txtRule;
         private System.Windows.Forms.CheckBox chkReadIgnoreErrors;
         private System.Windows.Forms.GroupBox grpAdvFile;
