@@ -17,8 +17,6 @@ namespace FileGrab
         public frmMain()
         {
             InitializeComponent();
-            fsWatcher.SetWatchBuffer(Convert.ToInt32(cbReadBufferSize.SelectedItem));
-            fsWatcher.SetWatchFilter(txtRule.Text);
         }
 
         private void rbSpecific_CheckedChanged(object sender, EventArgs e)
@@ -51,9 +49,11 @@ namespace FileGrab
                 this.Text = $"{ ProgramName } (running)";
                 changeControls(false);
 
+
 				fsWatcher.WatchStart((rbAll.Checked) ? FsWatcherOpts.WatchAll : FsWatcherOpts.WatchDir, txtPath.Text);
                 fsWatcher.SetWatchRecursion(chkRecursive.Checked);
-                fsWatcher.AddWatchEvent(OnCreation);
+
+                fsWatcher.AddHandler(OnChanged, OnChanged, OnDeleted, null, OnError);
                 
                 IsRunning = false;
             }
@@ -70,71 +70,7 @@ namespace FileGrab
                 IsRunning = true;
             }
         }
-
-        public void OnCreation(object source, FileSystemEventArgs e) 
-        {
-            // we cannot monitor the copy destination directory
-            if (txtCopyTo.Text != "" &&
-                e.FullPath.StartsWith(txtCopyTo.Text, StringComparison.CurrentCultureIgnoreCase))
-                return;
-
-            if (chkRule.Checked && txtRule.Text != "")
-            {
-                if (chkRuleRegex.Checked)
-                {
-                    Regex regex = new(txtRule.Text, RegexOptions.IgnoreCase);
-
-                    if (!(chkRuleNot.Checked ^ regex.IsMatch(Path.GetFileName(e.FullPath))))
-                        return;
-                }
-            }
-
-            statusFileFound.Text = e.FullPath;
-
-            if (txtCopyTo.Text != "")
-            {
-                try
-                {
-                    if (!File.Exists(e.FullPath))
-                        return;
-                    string filename = e.Name.Substring(1 + e.Name.LastIndexOf('\\'));
-					string dstFile = Path.Combine(txtCopyTo.Text, filename);
-                    File.Copy(e.FullPath, dstFile, chkWriteOverwrite.Checked);
-                    File.SetAttributes(dstFile, FileAttributes.Normal); // remove read-only, hidden, etc
-
-                    if (chkWritePreserveTimes.Checked)
-                    {
-                        File.SetCreationTime(dstFile, File.GetCreationTime(e.FullPath));
-                        File.SetLastAccessTime(dstFile, File.GetLastAccessTime(e.FullPath));
-                        File.SetLastWriteTime(dstFile, File.GetLastWriteTime(e.FullPath));
-                    }
-
-                }
-                catch (IOException ex)
-                {
-                    if (!chkReadIgnoreErrors.Checked)
-                        MessageBox.Show(ex.Message);
-                }
-            }
-
-            // I'll improve this later
-            if (txtFtpHost.Text == "")
-                return;
-
-            try
-            {
-                ftpUpload = FtpUpload.Create(txtFtpHost.Text, (int)txtFtpPort.Value, e.Name);
-                ftpUpload.UseCredentials(txtFtpUser.Text, txtFtpPassword.Text, chkFtpAnonymous.Checked);
-                ftpUpload.Upload(e.FullPath);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Connection failed!\n\nDetails:\n { ex.Message }",
-                                "FTP Upload", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
+        
         private void btnPath_Click(object sender, EventArgs e)
         {
             folderDlg.ShowDialog();
@@ -216,21 +152,72 @@ namespace FileGrab
             chkRuleNot.Enabled = chkRuleRegex.Checked;
         }
 
-        //private void button2_Click(object sender, EventArgs e)
-        //{
-        //    MessageBox.Show(
-        //        "You can set the format using the following variables:\n\n" +
-        //        "%{name}\t- the file name without extension\n" +
-        //        "%{ext}\t- the file extension\n" +
-        //        "%{md5}\t- the file MD5 hash\n" +
-        //        "%{sha1}\t- the file SHA1 hash\n" +
-        //        "%{sha256}\t- the file SHA-256 hash\n"
-        //    );
-        //}
-
         private void linkWiki_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://sourceforge.net/p/FileGrab/wiki/Home/");
+        }
+
+        public void OnChanged(object source, FileSystemEventArgs e)
+        {
+            // we cannot monitor the copy destination directory
+            if (txtCopyTo.Text != "" &&
+                e.FullPath.StartsWith(txtCopyTo.Text, StringComparison.CurrentCultureIgnoreCase))
+                return;
+
+            statusFileFound.Text = $"{ e.FullPath } { DateTime.Now }";
+
+            if (txtCopyTo.Text != "")
+            {
+                try
+                {
+                    string filename = e.Name[(1 + e.Name.LastIndexOf('\\'))..];
+                    string dstFile = Path.Combine(txtCopyTo.Text, filename);
+
+                    Utils.CopyFileTo(e.FullPath, dstFile, expr: txtRule.Text);
+
+                    File.SetAttributes(dstFile, FileAttributes.Normal); // remove read-only, hidden, etc
+
+                    if (chkWritePreserveTimes.Checked)
+                    {
+                        File.SetCreationTime(dstFile, File.GetCreationTime(e.FullPath));
+                        File.SetLastAccessTime(dstFile, File.GetLastAccessTime(e.FullPath));
+                        File.SetLastWriteTime(dstFile, File.GetLastWriteTime(e.FullPath));
+                    }
+                }
+                catch (IOException ex)
+                {
+                    if (!chkReadIgnoreErrors.Checked)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+
+            // I'll improve this later
+            if (txtFtpHost.Text == "")
+                return;
+
+            try
+            {
+                ftpUpload = FtpUpload.Create(txtFtpHost.Text, (int)txtFtpPort.Value, e.Name);
+                ftpUpload.UseCredentials(txtFtpUser.Text, txtFtpPassword.Text, chkFtpAnonymous.Checked);
+                ftpUpload.Upload(e.FullPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Connection failed!\n\nDetails:\n { ex.Message }",
+                                "FTP Upload", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void OnDeleted(object source, FileSystemEventArgs e)
+        {
+            statusFileFound.Text = $"Deleted: { e.FullPath } { DateTime.Now }";
+        }
+
+        public void OnError(object source, ErrorEventArgs e)
+        {
+            MessageBox.Show($"{ e.GetException() }");
         }
 	}
 }
