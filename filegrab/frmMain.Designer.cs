@@ -48,7 +48,6 @@
 			this.groupFilesystem = new System.Windows.Forms.GroupBox();
 			this.chkRule = new System.Windows.Forms.CheckBox();
 			this.chkRuleRegex = new System.Windows.Forms.CheckBox();
-			this.chkRuleNot = new System.Windows.Forms.CheckBox();
 			this.txtRule = new System.Windows.Forms.TextBox();
 			this.chkRecursive = new System.Windows.Forms.CheckBox();
 			this.txtPath = new System.Windows.Forms.TextBox();
@@ -75,11 +74,19 @@
 			this.tabAbout = new System.Windows.Forms.TabPage();
 			this.linkWiki = new System.Windows.Forms.LinkLabel();
 			this.lblAbout = new System.Windows.Forms.Label();
+			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.radioButton1 = new System.Windows.Forms.RadioButton();
+			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.button2 = new System.Windows.Forms.Button();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.statusFileFound = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ttInfo = new System.Windows.Forms.ToolTip(this.components);
 			this.ttWarn = new System.Windows.Forms.ToolTip(this.components);
+			this.radioButton2 = new System.Windows.Forms.RadioButton();
+			this.label3 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.txtFtpPort)).BeginInit();
 			this.groupFtp.SuspendLayout();
 			this.tabControl.SuspendLayout();
@@ -91,6 +98,7 @@
 			this.grpAdvFile.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tabAbout.SuspendLayout();
+			this.tabPage3.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -249,6 +257,7 @@
 			this.tabControl.Controls.Add(this.tabCapture);
 			this.tabControl.Controls.Add(this.tabAdvanced);
 			this.tabControl.Controls.Add(this.tabAbout);
+			this.tabControl.Controls.Add(this.tabPage3);
 			this.tabControl.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.tabControl.Location = new System.Drawing.Point(9, 14);
 			this.tabControl.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -273,7 +282,6 @@
 			// 
 			this.groupFilesystem.Controls.Add(this.chkRule);
 			this.groupFilesystem.Controls.Add(this.chkRuleRegex);
-			this.groupFilesystem.Controls.Add(this.chkRuleNot);
 			this.groupFilesystem.Controls.Add(this.txtRule);
 			this.groupFilesystem.Controls.Add(this.chkRecursive);
 			this.groupFilesystem.Controls.Add(this.txtPath);
@@ -316,18 +324,6 @@
 			this.chkRuleRegex.UseVisualStyleBackColor = true;
 			this.chkRuleRegex.CheckedChanged += new System.EventHandler(this.chkRuleRegex_CheckedChanged);
 			// 
-			// chkRuleNot
-			// 
-			this.chkRuleNot.AutoSize = true;
-			this.chkRuleNot.Enabled = false;
-			this.chkRuleNot.Location = new System.Drawing.Point(478, 185);
-			this.chkRuleNot.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.chkRuleNot.Name = "chkRuleNot";
-			this.chkRuleNot.Size = new System.Drawing.Size(51, 21);
-			this.chkRuleNot.TabIndex = 15;
-			this.chkRuleNot.Text = "Not";
-			this.chkRuleNot.UseVisualStyleBackColor = true;
-			// 
 			// txtRule
 			// 
 			this.txtRule.Enabled = false;
@@ -352,7 +348,6 @@
 			this.chkRecursive.TabIndex = 13;
 			this.chkRecursive.Text = "Include subdirectories";
 			this.chkRecursive.UseVisualStyleBackColor = true;
-			//this.chkRecursive.CheckedChanged += new System.EventHandler(this.chkRecursive_CheckedChanged);
 			// 
 			// txtPath
 			// 
@@ -656,6 +651,70 @@
 			this.lblAbout.TabIndex = 0;
 			this.lblAbout.Text = resources.GetString("lblAbout.Text");
 			// 
+			// tabPage3
+			// 
+			this.tabPage3.Controls.Add(this.label3);
+			this.tabPage3.Controls.Add(this.radioButton2);
+			this.tabPage3.Controls.Add(this.radioButton1);
+			this.tabPage3.Controls.Add(this.textBox2);
+			this.tabPage3.Controls.Add(this.button2);
+			this.tabPage3.Controls.Add(this.label2);
+			this.tabPage3.Controls.Add(this.label1);
+			this.tabPage3.Location = new System.Drawing.Point(4, 29);
+			this.tabPage3.Name = "tabPage3";
+			this.tabPage3.Size = new System.Drawing.Size(573, 254);
+			this.tabPage3.TabIndex = 4;
+			this.tabPage3.Text = "Logs";
+			this.tabPage3.UseVisualStyleBackColor = true;
+			// 
+			// radioButton1
+			// 
+			this.radioButton1.AutoSize = true;
+			this.radioButton1.Location = new System.Drawing.Point(8, 39);
+			this.radioButton1.Name = "radioButton1";
+			this.radioButton1.Size = new System.Drawing.Size(146, 21);
+			this.radioButton1.TabIndex = 10;
+			this.radioButton1.TabStop = true;
+			this.radioButton1.Text = "Log EVERY change";
+			this.radioButton1.UseVisualStyleBackColor = true;
+			// 
+			// textBox2
+			// 
+			this.textBox2.Enabled = false;
+			this.textBox2.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.textBox2.Location = new System.Drawing.Point(8, 127);
+			this.textBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.textBox2.Name = "textBox2";
+			this.textBox2.ReadOnly = true;
+			this.textBox2.Size = new System.Drawing.Size(481, 23);
+			this.textBox2.TabIndex = 6;
+			// 
+			// button2
+			// 
+			this.button2.Location = new System.Drawing.Point(497, 125);
+			this.button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(34, 27);
+			this.button2.TabIndex = 7;
+			this.button2.Text = "...";
+			this.button2.UseVisualStyleBackColor = true;
+			this.button2.Click += new System.EventHandler(this.button2_Click);
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(6, 101);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(100, 23);
+			this.label2.TabIndex = 8;
+			this.label2.Text = "Log path";
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(0, 0);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(100, 23);
+			this.label1.TabIndex = 0;
+			// 
 			// statusStrip1
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -673,7 +732,6 @@
 			this.statusFileFound.Name = "statusFileFound";
 			this.statusFileFound.Size = new System.Drawing.Size(90, 17);
 			this.statusFileFound.Text = "statusFileFound";
-			//this.statusFileFound.Click += new System.EventHandler(this.statusFileFound_Click);
 			// 
 			// toolStripStatusLabel2
 			// 
@@ -690,6 +748,26 @@
 			// 
 			this.ttWarn.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
 			this.ttWarn.ToolTipTitle = "Attention";
+			// 
+			// radioButton2
+			// 
+			this.radioButton2.AutoSize = true;
+			this.radioButton2.Location = new System.Drawing.Point(8, 66);
+			this.radioButton2.Name = "radioButton2";
+			this.radioButton2.Size = new System.Drawing.Size(150, 21);
+			this.radioButton2.TabIndex = 11;
+			this.radioButton2.TabStop = true;
+			this.radioButton2.Text = "Log Creation (only)";
+			this.radioButton2.UseVisualStyleBackColor = true;
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(8, 18);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(84, 17);
+			this.label3.TabIndex = 12;
+			this.label3.Text = "Log options";
 			// 
 			// frmMain
 			// 
@@ -724,6 +802,8 @@
 			this.groupBox1.PerformLayout();
 			this.tabAbout.ResumeLayout(false);
 			this.tabAbout.PerformLayout();
+			this.tabPage3.ResumeLayout(false);
+			this.tabPage3.PerformLayout();
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -767,7 +847,6 @@
         private System.Windows.Forms.TabPage tabAdvanced;
         private System.Windows.Forms.CheckBox chkRule;
         private System.Windows.Forms.CheckBox chkRuleRegex;
-        private System.Windows.Forms.CheckBox chkRuleNot;
         private System.Windows.Forms.TextBox txtRule;
         private System.Windows.Forms.CheckBox chkReadIgnoreErrors;
         private System.Windows.Forms.GroupBox grpAdvFile;
@@ -783,6 +862,14 @@
         private System.Windows.Forms.ComboBox cbReadBufferSize;
         private System.Windows.Forms.CheckBox chkWritePreserveTimes;
         private System.Windows.Forms.LinkLabel linkWiki;
-    }
+		private System.Windows.Forms.TabPage tabPage3;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.RadioButton radioButton1;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.RadioButton radioButton2;
+	}
 }
 

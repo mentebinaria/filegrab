@@ -34,6 +34,7 @@ namespace FileGrab
             if (chkRule.Checked && txtRule.Text == "")
             {
                 txtRule.BackColor = System.Drawing.Color.LightPink;
+                MessageBox.Show("Regex rule can't be blank");
                 return;
             }
 
@@ -42,6 +43,14 @@ namespace FileGrab
                 ActiveForm.ShowInTaskbar = false;
                 ActiveForm.Visible = false;
             }
+
+            if (string.IsNullOrEmpty(textBox2.Text))
+            {
+                MessageBox.Show("Log path can't be empty!");
+                return;
+            }
+
+            Logging.Setup(textBox2.Text);
 
             if (IsRunning)
             {
@@ -53,7 +62,18 @@ namespace FileGrab
 				fsWatcher.WatchStart((rbAll.Checked) ? FsWatcherOpts.WatchAll : FsWatcherOpts.WatchDir, txtPath.Text);
                 fsWatcher.SetWatchRecursion(chkRecursive.Checked);
 
-                fsWatcher.AddHandler(OnChanged, OnChanged, OnDeleted, null, OnError);
+                if (radioButton1.Checked)
+                {
+                    fsWatcher.AddHandler(OnChanged, OnChanged, OnChanged, OnChanged, OnError);
+                }
+                else if (radioButton2.Checked)
+                {
+                    fsWatcher.AddHandler(null, OnCreation, null, null, OnError);
+                }
+                else
+                {
+                    fsWatcher.AddHandler(null, OnCreation, OnDeleted, OnRenamed, OnError);
+                }
                 
                 IsRunning = false;
             }
@@ -78,9 +98,15 @@ namespace FileGrab
                 txtPath.Text = folderDlg.SelectedPath;
         }
 
-        private void chkFtpAnonymous_CheckedChanged(object sender, EventArgs e)
-        {
-            txtFtpUser.Enabled = txtFtpPassword.Enabled = !chkFtpAnonymous.Checked;
+		private void button2_Click(object sender, EventArgs e)
+		{
+            folderDlg.ShowDialog();
+            if (folderDlg.SelectedPath != "")
+            {
+                textBox2.Text = folderDlg.SelectedPath;
+                Logging.Setup(textBox2.Text);
+            }
+
         }
 
 		private void btnCopyToBrowse_Click(object sender, EventArgs e)
@@ -89,6 +115,12 @@ namespace FileGrab
             if (folderDlg.SelectedPath != "")
                 txtCopyTo.Text = folderDlg.SelectedPath;
         }
+
+        private void chkFtpAnonymous_CheckedChanged(object sender, EventArgs e)
+        {
+            txtFtpUser.Enabled = txtFtpPassword.Enabled = !chkFtpAnonymous.Checked;
+        }
+
 
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -101,7 +133,6 @@ namespace FileGrab
         private void chkRule_CheckedChanged(object sender, EventArgs e)
         {
             txtRule.Enabled = chkRuleRegex.Enabled = chkRule.Checked;
-            chkRuleNot.Enabled = chkRuleRegex.Checked & chkRule.Checked;
             if (!chkRule.Checked)
             {
                 btnStart.Enabled = true;
@@ -149,7 +180,6 @@ namespace FileGrab
                 txtRule_TextChanged(sender, e);
             else
                 txtRule.BackColor = System.Drawing.Color.White;
-            chkRuleNot.Enabled = chkRuleRegex.Checked;
         }
 
         private void linkWiki_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -157,14 +187,25 @@ namespace FileGrab
             System.Diagnostics.Process.Start("https://sourceforge.net/p/FileGrab/wiki/Home/");
         }
 
+        // Handlers
         public void OnChanged(object source, FileSystemEventArgs e)
+		{
+            if (e.ChangeType == WatcherChangeTypes.Changed)
+            {
+                Logging.Log($"Changed: { e.FullPath }");
+                statusFileFound.Text = $"Changed: { e.FullPath }";
+            }
+		}
+
+        public void OnCreation(object source, FileSystemEventArgs e)
         {
             // we cannot monitor the copy destination directory
             if (txtCopyTo.Text != "" &&
                 e.FullPath.StartsWith(txtCopyTo.Text, StringComparison.CurrentCultureIgnoreCase))
                 return;
 
-            statusFileFound.Text = $"{ e.FullPath } { DateTime.Now }";
+            Logging.Log($"Created: { e.FullPath }");
+            statusFileFound.Text = $"{ e.FullPath }";
 
             if (txtCopyTo.Text != "")
             {
@@ -212,12 +253,19 @@ namespace FileGrab
 
         public void OnDeleted(object source, FileSystemEventArgs e)
         {
+            Logging.Log($"Deleted: { e.FullPath }");
             statusFileFound.Text = $"Deleted: { e.FullPath } { DateTime.Now }";
+        }
+
+        public void OnRenamed(object source, RenamedEventArgs e)
+        {
+            Logging.Log($"Renamed: { e.OldFullPath } -> { e.FullPath }");
+            statusFileFound.Text = $"Renamed: { e.OldFullPath } -> { e.FullPath }";
         }
 
         public void OnError(object source, ErrorEventArgs e)
         {
-            MessageBox.Show($"{ e.GetException() }");
+            MessageBox.Show($"Error :: { e.GetException() }");
         }
 	}
 }
